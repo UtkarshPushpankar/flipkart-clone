@@ -1,0 +1,134 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  phone     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  addresses    Address[]
+  orders       Order[]
+  cartItems    CartItem[]
+  wishlistItems WishlistItem[]
+}
+
+model Address {
+  id        String  @id @default(uuid())
+  userId    String
+  fullName  String
+  phone     String
+  pincode   String
+  street    String
+  city      String
+  state     String
+  isDefault Boolean @default(false)
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders Order[]
+}
+
+model Category {
+  id       String    @id @default(uuid())
+  name     String    @unique
+  slug     String    @unique
+  imageUrl String?
+
+  products Product[]
+}
+
+model Product {
+  id             String   @id @default(uuid())
+  name           String
+  description    String
+  brand          String
+  categoryId     String
+  price          Float
+  mrp            Float
+  stock          Int      @default(0)
+  rating         Float    @default(0)
+  reviewCount    Int      @default(0)
+  images         String[]
+  specifications Json     @default("{}")
+  isFeatured     Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  category      Category       @relation(fields: [categoryId], references: [id])
+  cartItems     CartItem[]
+  orderItems    OrderItem[]
+  wishlistItems WishlistItem[]
+}
+
+model CartItem {
+  id        String @id @default(uuid())
+  userId    String
+  productId String
+  quantity  Int    @default(1)
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+}
+
+model Order {
+  id            String      @id @default(uuid())
+  userId        String
+  addressId     String
+  status        OrderStatus @default(PLACED)
+  totalAmount   Float
+  paymentMethod String      @default("COD")
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  user      User        @relation(fields: [userId], references: [id])
+  address   Address     @relation(fields: [addressId], references: [id])
+  items     OrderItem[]
+}
+
+model OrderItem {
+  id        String @id @default(uuid())
+  orderId   String
+  productId String
+  quantity  Int
+  price     Float
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model WishlistItem {
+  id        String @id @default(uuid())
+  userId    String
+  productId String
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+}
+
+enum OrderStatus {
+  PLACED
+  CONFIRMED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+
