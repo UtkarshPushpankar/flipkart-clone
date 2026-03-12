@@ -68,16 +68,26 @@ async function main() {
       description: 'Flagship Android smartphone with 200MP camera, S-Pen, and Snapdragon 8 Gen 3. 12GB RAM, 256GB storage.',
       brand: 'Samsung', categoryId: electronics.id, price: 109999, mrp: 134999,
       stock: 25, rating: 4.5, reviewCount: 3421, isFeatured: true,
-      images: ['https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=500'],
-      specifications: { Display: '6.8" Dynamic AMOLED 2X', Processor: 'Snapdragon 8 Gen 3', Battery: '5000mAh', Camera: '200MP', RAM: '12GB', Storage: '256GB' },
+      images: [
+        'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=500',
+        'https://images.unsplash.com/photo-1574920162043-b872873f19c8?w=500',
+        'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500',
+        'https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=500',
+      ],
+      specifications: { Display: '6.8\" Dynamic AMOLED 2X', Processor: 'Snapdragon 8 Gen 3', Battery: '5000mAh', Camera: '200MP', RAM: '12GB', Storage: '256GB' },
     },
     {
       name: 'Apple iPhone 15 Pro',
       description: 'Apple iPhone 15 Pro with A17 Pro chip, titanium design, 48MP camera system, and USB-C.',
       brand: 'Apple', categoryId: electronics.id, price: 134900, mrp: 159900,
       stock: 18, rating: 4.7, reviewCount: 5210, isFeatured: true,
-      images: ['https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=500'],
-      specifications: { Display: '6.1" Super Retina XDR', Processor: 'A17 Pro', Battery: '3274mAh', Camera: '48MP Triple', RAM: '8GB', Storage: '128GB' },
+      images: [
+        'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=500',
+        'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=500',
+        'https://images.unsplash.com/photo-1580910051074-3eb694886505?w=500',
+        'https://images.unsplash.com/photo-1565536421961-1a462c1d9e11?w=500',
+      ],
+      specifications: { Display: '6.1\" Super Retina XDR', Processor: 'A17 Pro', Battery: '3274mAh', Camera: '48MP Triple', RAM: '8GB', Storage: '128GB' },
     },
     {
       name: 'Apple iPhone 15',
@@ -124,7 +134,12 @@ async function main() {
       description: 'Industry-leading noise canceling headphones with 30hr battery and multipoint connection.',
       brand: 'Sony', categoryId: electronics.id, price: 24990, mrp: 34990,
       stock: 35, rating: 4.7, reviewCount: 4312, isFeatured: true,
-      images: ['https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500'],
+      images: [
+        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500',
+        'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=500',
+        'https://images.unsplash.com/photo-1487215078519-e21cc028cb29?w=500',
+        'https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?w=500',
+      ],
       specifications: { 'Battery Life': '30 Hours', 'Noise Cancelling': 'Yes', Connectivity: 'Bluetooth 5.2', Weight: '250g', Microphone: 'Built-in' },
     },
     {
@@ -140,8 +155,13 @@ async function main() {
       description: 'MacBook Air with M2 chip, 13.6-inch Liquid Retina display, and up to 18 hours battery.',
       brand: 'Apple', categoryId: electronics.id, price: 99900, mrp: 119900,
       stock: 20, rating: 4.8, reviewCount: 9870, isFeatured: true,
-      images: ['https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500'],
-      specifications: { Display: '13.6" Liquid Retina', Chip: 'Apple M2', RAM: '8GB', Storage: '256GB SSD', Battery: '18 hours', Weight: '1.24 kg' },
+      images: [
+        'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500',
+        'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500',
+        'https://images.unsplash.com/photo-1611186871525-9c4e4a45ad3e?w=500',
+        'https://images.unsplash.com/photo-1602080858428-57174f9431cf?w=500',
+      ],
+      specifications: { Display: '13.6\" Liquid Retina', Chip: 'Apple M2', RAM: '8GB', Storage: '256GB SSD', Battery: '18 hours', Weight: '1.24 kg' },
     },
     {
       name: 'HP Pavilion Gaming 15 Laptop',
@@ -160,11 +180,16 @@ async function main() {
       specifications: { Display: '15.6" FHD 300Hz', Processor: 'AMD Ryzen 9 5900HX', RAM: '16GB DDR4', Storage: '1TB NVMe', GPU: 'NVIDIA RTX 3070 8GB' },
     },
     {
-      name: 'Samsung 55" 4K QLED Smart TV',
+      name: 'Samsung 55\" 4K QLED Smart TV',
       description: 'Samsung QLED TV with Quantum Processor 4K, Motion Xcelerator, and Tizen OS.',
       brand: 'Samsung', categoryId: electronics.id, price: 54990, mrp: 79900,
       stock: 20, rating: 4.4, reviewCount: 7820, isFeatured: true,
-      images: ['https://images.unsplash.com/photo-1593359677879-a4bb92f829e1?w=500'],
+      images: [
+        'https://images.unsplash.com/photo-1593359677879-a4bb92f829e1?w=500',
+        'https://images.unsplash.com/photo-1461151304267-38535e780c79?w=500',
+        'https://images.unsplash.com/photo-1548921441-89c8bd86ffb7?w=500',
+        'https://images.unsplash.com/photo-1567690187548-f07b1d7bf5a9?w=500',
+      ],
       specifications: { Size: '55 inches', Resolution: '4K UHD', 'Panel Type': 'QLED', 'Smart TV': 'Tizen OS', HDR: 'HDR10+', 'Refresh Rate': '60Hz' },
     },
     {
@@ -188,7 +213,12 @@ async function main() {
       description: 'Canon EOS R50 with 24.2MP APS-C sensor, 4K video, and compact lightweight body.',
       brand: 'Canon', categoryId: electronics.id, price: 64995, mrp: 79995,
       stock: 12, rating: 4.5, reviewCount: 2340, isFeatured: true,
-      images: ['https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500'],
+      images: [
+        'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500',
+        'https://images.unsplash.com/photo-1502920917128-1aa500764bea?w=500',
+        'https://images.unsplash.com/photo-1510127034890-ba27508e9f1c?w=500',
+        'https://images.unsplash.com/photo-1581591524425-c7e0978865fc?w=500',
+      ],
       specifications: { Sensor: '24.2MP APS-C CMOS', Video: '4K 30fps', AF: 'Dual Pixel CMOS AF II', 'Burst Rate': '15fps', Weight: '375g' },
     },
     {
@@ -204,7 +234,12 @@ async function main() {
       description: 'Apple Watch Series 9 with S9 chip, double tap gesture, and carbon neutral design.',
       brand: 'Apple', categoryId: electronics.id, price: 44900, mrp: 51900,
       stock: 40, rating: 4.6, reviewCount: 11200, isFeatured: true,
-      images: ['https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?w=500'],
+      images: [
+        'https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?w=500',
+        'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500',
+        'https://images.unsplash.com/photo-1617043786394-f977fa12eddf?w=500',
+        'https://images.unsplash.com/photo-1551816230-ef5deaed4a26?w=500',
+      ],
       specifications: { Display: '45mm Always-On Retina', Chip: 'S9 SiP', GPS: 'Built-in', 'Water Resistance': '50m', Battery: '18 hours', Health: 'ECG, Blood Oxygen' },
     },
     {
@@ -352,7 +387,12 @@ async function main() {
       description: "Classic slim fit jeans with stretch fabric, 5-pocket styling, and iconic Levi's red tab.",
       brand: "Levi's", categoryId: fashion.id, price: 2099, mrp: 3999,
       stock: 75, rating: 4.4, reviewCount: 8920, isFeatured: false,
-      images: ['https://images.unsplash.com/photo-1542272604-787c3835535d?w=500'],
+      images: [
+        'https://images.unsplash.com/photo-1542272604-787c3835535d?w=500',
+        'https://images.unsplash.com/photo-1475178626620-a4d074967452?w=500',
+        'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500',
+        'https://images.unsplash.com/photo-1555689502-c4b22d76c56f?w=500',
+      ],
       specifications: { Fabric: '99% Cotton 1% Elastane', Fit: 'Slim Fit', Rise: 'Mid Rise', 'Wash Type': 'Dark Wash', Pockets: '5 Pocket' },
     },
     {
@@ -368,7 +408,12 @@ async function main() {
       description: 'Nike Air Force 1 classic low-top with Air cushioning and perforated leather toe box.',
       brand: 'Nike', categoryId: fashion.id, price: 7495, mrp: 8595,
       stock: 80, rating: 4.5, reviewCount: 45600, isFeatured: true,
-      images: ['https://images.unsplash.com/photo-1549298916-b41d501d3772?w=500'],
+      images: [
+        'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=500',
+        'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500',
+        'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500',
+        'https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=500',
+      ],
       specifications: { Type: 'Sneaker', Material: 'Leather', Sole: 'Rubber', Cushioning: 'Air', Closure: 'Lace-up' },
     },
     {
@@ -408,7 +453,12 @@ async function main() {
       description: 'Ray-Ban RB2140 Wayfarer with acetate frame and G-15 crystal UV400 lenses.',
       brand: 'Ray-Ban', categoryId: fashion.id, price: 5790, mrp: 6890,
       stock: 40, rating: 4.6, reviewCount: 15600, isFeatured: true,
-      images: ['https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500'],
+      images: [
+        'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500',
+        'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500',
+        'https://images.unsplash.com/photo-1473496169904-658ba7574b0d?w=500',
+        'https://images.unsplash.com/photo-1504198453319-5ce911bafcde?w=500',
+      ],
       specifications: { Frame: 'Acetate', Lens: 'G-15 Crystal', UV: 'UV400', Style: 'Wayfarer', Width: '50mm' },
     },
     {
@@ -556,7 +606,12 @@ async function main() {
       description: '4.2L digital air fryer with 8 preset programs, rapid air technology.',
       brand: 'Pigeon', categoryId: homeFurniture.id, price: 3299, mrp: 7000,
       stock: 55, rating: 4.4, reviewCount: 14300, isFeatured: false,
-      images: ['https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500'],
+      images: [
+        'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500',
+        'https://images.unsplash.com/photo-1574269909862-7e1d70bb8078?w=500',
+        'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=500',
+        'https://images.unsplash.com/photo-1556909172-54557c7e4fb7?w=500',
+      ],
       specifications: { Capacity: '4.2 Litres', Power: '1400W', Programs: '8 Presets', Temperature: '80-200°C', 'Non-Stick': 'Yes' },
     },
     {
@@ -588,15 +643,25 @@ async function main() {
       description: 'Wakefit 6-inch orthopedic mattress with memory foam top layer for pressure relief.',
       brand: 'Wakefit', categoryId: homeFurniture.id, price: 11999, mrp: 19999,
       stock: 30, rating: 4.4, reviewCount: 34500, isFeatured: true,
-      images: ['https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=500'],
-      specifications: { Size: 'Queen (60"x78")', Height: '6 inches', Layers: 'Memory foam + HR foam', Warranty: '10 years', Cover: 'Quilted knitted' },
+      images: [
+        'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=500',
+        'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500',
+        'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=500',
+        'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=500',
+      ],
+      specifications: { Size: 'Queen (60\"x78\")', Height: '6 inches', Layers: 'Memory foam + HR foam', Warranty: '10 years', Cover: 'Quilted knitted' },
     },
     {
       name: 'Bosch 7kg Front Load Washing Machine',
       description: 'Bosch WAJ2846WIN with EcoSilence Drive motor and i-DOS automatic dosing system.',
       brand: 'Bosch', categoryId: homeFurniture.id, price: 34990, mrp: 47990,
       stock: 15, rating: 4.4, reviewCount: 8900, isFeatured: true,
-      images: ['https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=500'],
+      images: [
+        'https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=500',
+        'https://images.unsplash.com/photo-1604335399105-a0c585fd81a1?w=500',
+        'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500',
+        'https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=500',
+      ],
       specifications: { Capacity: '7 kg', Type: 'Front Load', Motor: 'EcoSilence Drive', 'Spin Speed': '1400 RPM', Programs: '15' },
     },
     {
@@ -733,19 +798,29 @@ async function main() {
     },
     {
       name: 'Atomic Habits by James Clear',
-      description: 'The #1 NY Times bestseller about building good habits and breaking bad ones.',
-      brand: 'Penguin Random House', categoryId: books.id, price: 399, mrp: 699,
-      stock: 300, rating: 4.7, reviewCount: 89000, isFeatured: true,
-      images: ['https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500'],
-      specifications: { Author: 'James Clear', Publisher: 'Penguin Random House', Pages: '320', Language: 'English', ISBN: '9780735211292' },
+      description: 'James Clear\'s #1 New York Times bestseller on building good habits and breaking bad ones with proven frameworks.',
+      brand: 'Penguin Random House', categoryId: books.id, price: 499, mrp: 799,
+      stock: 200, rating: 4.8, reviewCount: 89000, isFeatured: true,
+      images: [
+        'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=500',
+        'https://images.unsplash.com/photo-1532012197267-da84d127e765?w=500',
+        'https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=500',
+        'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=500',
+      ],
+      specifications: { Pages: '320', Language: 'English', Genre: 'Self-help', Publisher: 'Penguin Random House', Format: 'Paperback' },
     },
     {
       name: 'Rich Dad Poor Dad by Robert Kiyosaki',
-      description: 'The #1 personal finance book of all time about what the rich teach their kids.',
-      brand: 'Plata Publishing', categoryId: books.id, price: 249, mrp: 495,
-      stock: 350, rating: 4.5, reviewCount: 98000, isFeatured: true,
-      images: ['https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=500'],
-      specifications: { Author: 'Robert T. Kiyosaki', Publisher: 'Plata Publishing', Pages: '336', Language: 'English', Genre: 'Finance' },
+      description: 'The #1 personal finance book of all time — teaches financial literacy and investing mindset.',
+      brand: 'Plata Publishing', categoryId: books.id, price: 299, mrp: 499,
+      stock: 300, rating: 4.7, reviewCount: 124000, isFeatured: true,
+      images: [
+        'https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=500',
+        'https://images.unsplash.com/photo-1565116175827-965e6f5b3c6d?w=500',
+        'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=500',
+        'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=500',
+      ],
+      specifications: { Pages: '336', Language: 'English', Genre: 'Personal Finance', Publisher: 'Plata Publishing', Format: 'Paperback' },
     },
     {
       name: 'The Psychology of Money by Morgan Housel',
@@ -832,6 +907,32 @@ async function main() {
     // SPORTS & FITNESS — 15 products
     // ════════════════════════════════════
     {
+      name: 'Boldfit Heavy Duty Gym Gloves',
+      description: 'Neoprene padded gym gloves with full palm protection, adjustable wrist strap, and anti-slip grip.',
+      brand: 'Boldfit', categoryId: sports.id, price: 399, mrp: 999,
+      stock: 250, rating: 4.2, reviewCount: 34500, isFeatured: false,
+      images: [
+        'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=500',
+        'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500',
+        'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=500',
+        'https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?w=500',
+      ],
+      specifications: { Material: 'Neoprene + Leather', 'Wrist Support': 'Yes', Padding: 'Full Palm', Sizes: 'S/M/L/XL', Activity: 'Gym/Weightlifting' },
+    },
+    {
+      name: 'Yonex Voltric 1 DG Badminton Racket',
+      description: 'Yonex Voltric 1 DG with isometric head, graphite shaft, and tri-voltage system for powerful smashes.',
+      brand: 'Yonex', categoryId: sports.id, price: 2299, mrp: 3999,
+      stock: 90, rating: 4.4, reviewCount: 18700, isFeatured: true,
+      images: [
+        'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=500',
+        'https://images.unsplash.com/photo-1616279969856-759f316a5ac1?w=500',
+        'https://images.unsplash.com/photo-1592656094267-764a45160876?w=500',
+        'https://images.unsplash.com/photo-1599474924187-334a4ae5bd3c?w=500',
+      ],
+      specifications: { Material: 'Graphite', Weight: '85g', 'String Tension': 'Up to 30lbs', Balance: 'Head Heavy', Flex: 'Medium' },
+    },
+    {
       name: 'Boldfit Anti-Slip TPE Yoga Mat 6mm',
       description: 'Anti-slip 6mm yoga mat with alignment lines and carrying strap.',
       brand: 'Boldfit', categoryId: sports.id, price: 599, mrp: 1999,
@@ -847,7 +948,7 @@ async function main() {
       images: ['https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500'],
       specifications: { Weight: '2kg x 2', Material: 'Rubber + Chrome', Type: 'Fixed Weight', 'Ideal For': 'Home Gym' },
     },
-        {
+    {
       name: 'Nivia Dominator Football (Size 5)',
       description: 'Official size 5 football with 32-panel machine-stitched design and high-air retention bladder.',
       brand: 'Nivia', categoryId: sports.id, price: 599, mrp: 999,
@@ -1048,7 +1149,13 @@ async function main() {
       description: 'Forest Essentials pure Ayurvedic serum with saffron and 24K gold for radiant skin.',
       brand: 'Forest Essentials', categoryId: beauty.id, price: 1995, mrp: 2795,
       stock: 50, rating: 4.6, reviewCount: 8900, isFeatured: true,
-      images: ['https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=500'],
+      images: [
+        'https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=500',
+        'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=500',
+        'https://images.unsplash.com/photo-1526045612212-70caf35c14df?w=500',
+        'https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=500',
+        'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=500',
+      ],
       specifications: { Volume: '30ml', 'Key Ingredient': 'Saffron, 24K Gold', 'Skin Type': 'All types', Ayurvedic: 'Yes', 'Cruelty Free': 'Yes' },
     },
   ];
