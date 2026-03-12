@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { FiChevronRight, FiFilter } from "react-icons/fi";
 import { useGetCategoriesQuery, useGetProductsQuery } from "../store/api/productsApi";
@@ -12,30 +12,38 @@ interface SortOption {
 
 const SORT_OPTIONS: SortOption[] = [
   { label: "Relevance", value: "" },
+  { label: "Popularity", value: "rating" },
   { label: "Price -- Low to High", value: "price_asc" },
   { label: "Price -- High to Low", value: "price_desc" },
-  { label: "Customer Rating", value: "rating" },
+  { label: "Newest First", value: "newest" },
 ];
+
+const PAGE_SIZE = 16;
 
 export default function ProductListing() {
   const [params, setParams] = useSearchParams();
-  const [sort, setSort] = useState("");
-  const [page, setPage] = useState(1);
-
   const search = params.get("search") || "";
   const category = params.get("category") || "";
+  const sort = params.get("sort") || "";
+  const page = Math.max(1, Number(params.get("page") || "1"));
+  const resolvedSort = sort === "newest" ? "" : sort;
 
-  const { data, isLoading } = useGetProductsQuery({ search, category, sort, page, limit: 16 });
+  const { data, isLoading } = useGetProductsQuery({
+    search,
+    category,
+    sort: resolvedSort,
+    page,
+    limit: PAGE_SIZE,
+  });
   const { data: categories } = useGetCategoriesQuery();
-
-  useEffect(() => {
-    setPage(1);
-  }, [search, category, sort]);
 
   const activeCategoryLabel = useMemo(() => {
     if (!category) return "All Products";
     return categories?.find((item) => item.slug === category)?.name || "Products";
   }, [categories, category]);
+
+  const rangeStart = data?.total ? (page - 1) * PAGE_SIZE + 1 : 0;
+  const rangeEnd = data?.total ? Math.min(page * PAGE_SIZE, data.total) : 0;
 
   const onCategorySelect = (slug: string) => {
     const next = new URLSearchParams(params);
@@ -46,6 +54,24 @@ export default function ProductListing() {
       next.set("category", slug);
       next.set("tab", slug);
     }
+    next.set("page", "1");
+    setParams(next);
+  };
+
+  const onSortSelect = (value: string) => {
+    const next = new URLSearchParams(params);
+    if (!value) {
+      next.delete("sort");
+    } else {
+      next.set("sort", value);
+    }
+    next.set("page", "1");
+    setParams(next);
+  };
+
+  const onPageChange = (nextPage: number) => {
+    const next = new URLSearchParams(params);
+    next.set("page", String(nextPage));
     setParams(next);
   };
 
@@ -106,12 +132,20 @@ export default function ProductListing() {
             <h1 className="text-[14px] text-[#212121]">
               {search ? (
                 <>
-                  Search results for <span className="font-semibold">"{search}"</span>
+                  <span className="font-semibold">
+                    Showing {rangeStart} - {rangeEnd}
+                  </span>{" "}
+                  of <span className="font-semibold">{data?.total ?? 0}</span> results for{" "}
+                  <span className="font-semibold">"{search}"</span>
                 </>
               ) : (
-                <span className="font-semibold">{activeCategoryLabel}</span>
+                <>
+                  <span className="font-semibold">{activeCategoryLabel}</span>
+                  <span className="ml-2 text-[#878787]">
+                    ({data?.total ?? 0} items)
+                  </span>
+                </>
               )}
-              <span className="ml-2 text-[#878787]">({data?.total ?? 0} items)</span>
             </h1>
 
             <div className="mt-3 flex flex-wrap items-center gap-4 text-[14px]">
@@ -119,7 +153,7 @@ export default function ProductListing() {
               {SORT_OPTIONS.map((option) => (
                 <button
                   key={option.value || "relevance"}
-                  onClick={() => setSort(option.value)}
+                  onClick={() => onSortSelect(option.value)}
                   className={`relative pb-1 ${
                     sort === option.value
                       ? "font-semibold text-[#2a55e5]"
@@ -153,7 +187,7 @@ export default function ProductListing() {
                 {data.totalPages > 1 ? (
                   <div className="mt-6 flex flex-wrap items-center justify-center gap-2 border-t border-[#f0f0f0] pt-4">
                     <button
-                      onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+                      onClick={() => onPageChange(Math.max(1, page - 1))}
                       disabled={page === 1}
                       className="rounded-sm border border-[#d9d9d9] px-3 py-1.5 text-sm disabled:cursor-not-allowed disabled:opacity-50"
                     >
@@ -162,7 +196,7 @@ export default function ProductListing() {
                     {Array.from({ length: data.totalPages }, (_, idx) => idx + 1).map((value) => (
                       <button
                         key={value}
-                        onClick={() => setPage(value)}
+                        onClick={() => onPageChange(value)}
                         className={`min-w-8 rounded-sm px-3 py-1.5 text-sm ${
                           value === page ? "bg-[#2a55e5] text-white" : "border border-[#d9d9d9]"
                         }`}
@@ -171,7 +205,7 @@ export default function ProductListing() {
                       </button>
                     ))}
                     <button
-                      onClick={() => setPage((prev) => Math.min(data.totalPages, prev + 1))}
+                      onClick={() => onPageChange(Math.min(data.totalPages, page + 1))}
                       disabled={page === data.totalPages}
                       className="rounded-sm border border-[#d9d9d9] px-3 py-1.5 text-sm disabled:cursor-not-allowed disabled:opacity-50"
                     >

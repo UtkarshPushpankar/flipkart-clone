@@ -8,9 +8,11 @@ import {
   FiShoppingCart,
   FiUser,
 } from "react-icons/fi";
+import { skipToken } from "@reduxjs/toolkit/query";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { logout } from "../../store/slices/authSlice";
 import { useGetCartQuery } from "../../store/api/cartApi";
+import { useGetProductsQuery } from "../../store/api/productsApi";
 
 interface NavTab {
   key: string;
@@ -63,6 +65,10 @@ const POPULAR_SEARCHES = [
   "face wash",
 ];
 
+const SEARCH_DEBOUNCE_MS = 220;
+const SEARCH_MIN_CHARS = 2;
+const MAX_SUGGESTIONS = 8;
+
 /* ── Bank offer countdown ── */
 function BankOfferTimer() {
   const [time, setTime] = useState({ h: 2, m: 59, s: 59 });
@@ -99,8 +105,10 @@ function BankOfferTimer() {
 
 export default function Navbar() {
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showSearchSuggestions, setShowSearchSuggestions] = useState(false);
+  const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -111,12 +119,34 @@ export default function Navbar() {
   const { user, isAuthenticated } = useAppSelector((s) => s.auth);
   const { data: cartItems } = useGetCartQuery(undefined, { skip: !isAuthenticated });
   const cartCount = cartItems?.length ?? 0;
+  const shouldFetchSuggestions =
+    showSearchSuggestions && debouncedSearch.length >= SEARCH_MIN_CHARS;
+  const { data: suggestionData, isFetching: isSuggestionLoading } = useGetProductsQuery(
+    shouldFetchSuggestions
+      ? {
+          search: debouncedSearch,
+          page: 1,
+          limit: MAX_SUGGESTIONS,
+        }
+      : skipToken,
+  );
 
   const activeTab = useMemo(() => {
     if (location.pathname === "/") return "for-you";
     const params = new URLSearchParams(location.search);
     return params.get("tab") || "";
   }, [location.pathname, location.search]);
+
+  const keywordSuggestions = useMemo(() => {
+    const normalized = search.trim().toLowerCase();
+    if (!normalized) return POPULAR_SEARCHES.slice(0, MAX_SUGGESTIONS);
+    return POPULAR_SEARCHES.filter((item) => item.toLowerCase().includes(normalized)).slice(
+      0,
+      MAX_SUGGESTIONS,
+    );
+  }, [search]);
+  const productSuggestions = suggestionData?.products ?? [];
+  const showProductSuggestions = search.trim().length >= SEARCH_MIN_CHARS;
 
   useEffect(() => {
     const closeMenus = (event: MouseEvent) => {
@@ -132,28 +162,76 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setDebouncedSearch(search.trim());
+    }, SEARCH_DEBOUNCE_MS);
+
+    return () => window.clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
+    const currentSearch = new URLSearchParams(location.search).get("search") ?? "";
+    if (location.pathname === "/products") {
+      setSearch(currentSearch);
+    }
+  }, [location.pathname, location.search]);
+
+  useEffect(() => {
+    setActiveSuggestionIndex(-1);
+  }, [search, showSearchSuggestions, suggestionData?.products?.length]);
+
+  useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  const filteredSuggestions = useMemo(() => {
-    if (!search.trim()) return POPULAR_SEARCHES;
-    return POPULAR_SEARCHES.filter((item) =>
-      item.toLowerCase().includes(search.toLowerCase()),
-    );
-  }, [search]);
 
   const goToSearch = (value: string) => {
     const query = value.trim();
     if (!query) return;
     navigate(`/products?search=${encodeURIComponent(query)}`);
     setShowSearchSuggestions(false);
+    setActiveSuggestionIndex(-1);
+    setSearch(query);
   };
 
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    goToSearch(search);
+    if (activeSuggestionIndex >= 0) {
+      if (showProductSuggestions && productSuggestions[activeSuggestionIndex]) {
+        goToSearch(productSuggestions[activeSuggestionIndex].name);
+        return;
+      }
+      if (!showProductSuggestions && keywordSuggestions[activeSuggestionIndex]) {
+        goToSearch(keywordSuggestions[activeSuggestionIndex]);
+        return;
+      }
+    }
+    goToSearch(search || debouncedSearch);
+  };
+
+  const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!showSearchSuggestions) return;
+
+    const total = showProductSuggestions ? productSuggestions.length : keywordSuggestions.length;
+    if (!total) return;
+
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setActiveSuggestionIndex((prev) => (prev + 1) % total);
+      return;
+    }
+
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setActiveSuggestionIndex((prev) => (prev <= 0 ? total - 1 : prev - 1));
+      return;
+    }
+
+    if (event.key === "Escape") {
+      setShowSearchSuggestions(false);
+      setActiveSuggestionIndex(-1);
+    }
   };
 
   const handleTabClick = (tab: NavTab) => {
@@ -200,26 +278,80 @@ export default function Navbar() {
                 <FiSearch className="mr-2 text-xl text-[#717478]" />
                 <input
                   value={search}
-                  onChange={(event) => setSearch(event.target.value)}
+                  onChange={(event) => {
+                    setSearch(event.target.value);
+                    setShowSearchSuggestions(true);
+                  }}
                   onFocus={() => setShowSearchSuggestions(true)}
+                  onKeyDown={handleSearchKeyDown}
                   className="h-full w-full bg-transparent text-sm text-[#212121] outline-none placeholder:text-[#717478]"
                   placeholder="Search for Products, Brands and More"
                 />
               </div>
             </form>
 
-            {showSearchSuggestions && filteredSuggestions.length > 0 && (
-              <div className="absolute left-0 right-0 top-full z-50 mt-1 rounded-md border border-[#e6e6e6] bg-white py-1 shadow-lg">
-                {filteredSuggestions.map((item) => (
-                  <button
-                    key={item}
-                    onClick={() => goToSearch(item)}
-                    className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-[#212121] hover:bg-[#f5f5f5]"
-                  >
-                    <FiSearch className="text-[#878787]" />
-                    <span>{item}</span>
-                  </button>
-                ))}
+            {showSearchSuggestions && (
+              <div className="absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-2xl border border-[#e6e6e6] bg-white py-1 shadow-[0_6px_18px_rgba(0,0,0,0.14)]">
+                {showProductSuggestions ? (
+                  <>
+                    {isSuggestionLoading ? (
+                      <div className="space-y-2 px-4 py-3">
+                        {Array.from({ length: 4 }).map((_, index) => (
+                          <div key={index} className="h-10 animate-pulse rounded bg-[#f3f3f3]" />
+                        ))}
+                      </div>
+                    ) : productSuggestions.length ? (
+                      productSuggestions.map((product, index) => (
+                        <button
+                          key={product.id}
+                          onClick={() => goToSearch(product.name)}
+                          className={`flex w-full items-center gap-3 px-4 py-2.5 text-left ${
+                            activeSuggestionIndex === index ? "bg-[#f0f5ff]" : "hover:bg-[#f7f8fa]"
+                          }`}
+                        >
+                          <img
+                            src={
+                              product.images?.[0] ||
+                              "https://via.placeholder.com/44x44?text=No+Image"
+                            }
+                            alt={product.name}
+                            className="h-10 w-10 rounded-[4px] border border-[#ececec] object-cover"
+                            loading="lazy"
+                          />
+                          <span className="min-w-0 flex-1">
+                            <span className="block truncate text-[15px] leading-tight text-[#212121]">
+                              {product.name}
+                            </span>
+                            <span className="block truncate text-[13px] text-[#2874f0]">
+                              in {product.category?.name || product.brand}
+                            </span>
+                          </span>
+                        </button>
+                      ))
+                    ) : (
+                      <div className="px-4 py-3 text-sm text-[#878787]">
+                        No matches for "{search.trim()}". Try a different keyword.
+                      </div>
+                    )}
+                  </>
+                ) : keywordSuggestions.length ? (
+                  keywordSuggestions.map((item, index) => (
+                    <button
+                      key={item}
+                      onClick={() => goToSearch(item)}
+                      className={`flex w-full items-center gap-2 px-4 py-2.5 text-left text-[15px] text-[#212121] ${
+                        activeSuggestionIndex === index ? "bg-[#f0f5ff]" : "hover:bg-[#f7f8fa]"
+                      }`}
+                    >
+                      <FiSearch className="text-[#878787]" />
+                      <span>{item}</span>
+                    </button>
+                  ))
+                ) : (
+                  <div className="px-4 py-3 text-sm text-[#878787]">
+                    Type at least {SEARCH_MIN_CHARS} characters to see product previews.
+                  </div>
+                )}
               </div>
             )}
           </div>
