@@ -8,8 +8,6 @@ import {
   FiShoppingCart,
   FiUser,
 } from "react-icons/fi";
-import { FaBolt } from "react-icons/fa";
-import { MdFlightTakeoff } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { logout } from "../../store/slices/authSlice";
 import { useGetCartQuery } from "../../store/api/cartApi";
