@@ -1,226 +1,189 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useGetFeaturedProductsQuery, useGetCategoriesQuery } from '../store/api/productsApi';
-import ProductCard from '../components/product/ProductCard';
-import ProductSkeleton from '../components/common/Skeleton';
-import { FaChevronRight } from 'react-icons/fa';
+import { Link } from "react-router-dom";
+import { FiArrowRight } from "react-icons/fi";
+import { useGetCategoriesQuery, useGetProductsQuery } from "../store/api/productsApi";
+import ProductSkeleton from "../components/common/Skeleton";
+import { formatCurrency } from "../utils/formatCurrency";
 
-const BANNERS = [
+interface HeroBanner {
+  title: string;
+  subtitle: string;
+  cta: string;
+  category: string;
+  bg: string;
+}
+
+const HERO_BANNERS: HeroBanner[] = [
   {
-    bg: 'linear-gradient(135deg, #1565C0 0%, #0D47A1 100%)',
-    title: 'Best Deals on Electronics',
-    subtitle: 'Up to 80% Off',
-    cta: 'Shop Now',
-    category: 'electronics',
+    title: "Big Savings Days",
+    subtitle: "Latest deals on top brands",
+    cta: "Shop now",
+    category: "electronics",
+    bg: "bg-gradient-to-r from-[#df2d45] to-[#ed5f72]",
   },
   {
-    bg: 'linear-gradient(135deg, #E65100 0%, #BF360C 100%)',
-    title: 'Fashion & Apparel',
-    subtitle: 'Minimum 50% Off',
-    cta: 'Explore',
-    category: 'fashion',
+    title: "Hottest picks this summer",
+    subtitle: "Fashion and lifestyle from Rs 299",
+    cta: "Explore",
+    category: "fashion",
+    bg: "bg-gradient-to-r from-[#c11a67] to-[#ee4f8d]",
   },
   {
-    bg: 'linear-gradient(135deg, #1B5E20 0%, #2E7D32 100%)',
-    title: 'Home & Furniture',
-    subtitle: 'Up to 60% Off',
-    cta: 'Discover',
-    category: 'home-furniture',
+    title: "Get extra cashback",
+    subtitle: "Credit card offers + exchange",
+    cta: "Know more",
+    category: "electronics",
+    bg: "bg-gradient-to-r from-[#0a60a8] to-[#2f86d0]",
   },
 ];
 
-const CATEGORY_ITEMS = [
-  { name: 'Mobiles', slug: 'electronics' },
-  { name: 'Electronics', slug: 'electronics' },
-  { name: 'Fashion', slug: 'fashion' },
-  { name: 'Appliances', slug: 'electronics' },
-  { name: 'Sports', slug: 'sports' },
-  { name: 'Home', slug: 'home-furniture' },
-  { name: 'Beauty', slug: 'beauty' },
-  { name: 'Books', slug: 'books' },
-];
-
-export default function Home() {
-  const { data: featured, isLoading: featuredLoading } = useGetFeaturedProductsQuery();
-  const [activeBanner, setActiveBanner] = useState<number>(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => setActiveBanner((p) => (p + 1) % BANNERS.length), 5000);
-    return () => clearInterval(timer);
-  }, []);
+function RailItem({
+  id,
+  name,
+  price,
+  mrp,
+  image,
+  tag,
+}: {
+  id: string;
+  name: string;
+  price: number;
+  mrp: number;
+  image: string;
+  tag?: string;
+}) {
+  const fallbackImage = `https://via.placeholder.com/300x300?text=${encodeURIComponent(name)}`;
 
   return (
-    <div style={{ backgroundColor: '#f1f3f6', minHeight: '100vh' }}>
-      <div className="max-w-[1300px] mx-auto px-3 py-3">
-
-        {/* Hero Banner Carousel */}
-        <div className="relative rounded-sm overflow-hidden mb-3 shadow-md" style={{ height: '320px' }}>
-          {BANNERS.map((banner, i) => (
-            <div
-              key={i}
-              className="absolute inset-0 flex items-center justify-between px-8 md:px-16 transition-opacity duration-500 ease-in-out"
-              style={{
-                background: banner.bg,
-                opacity: i === activeBanner ? 1 : 0,
-                pointerEvents: i === activeBanner ? 'auto' : 'none',
-              }}
-            >
-              <div className="text-white max-w-2xl">
-                <div className="inline-block text-[12px] font-bold px-3 py-1 rounded mb-4" style={{ backgroundColor: '#ff6b6b' }}>
-                  FEATURED
-                </div>
-                <h2 className="text-5xl font-bold leading-tight mb-3">{banner.title}</h2>
-                <p className="text-xl opacity-95 mb-6 font-medium">{banner.subtitle}</p>
-                <Link
-                  to={`/products?category=${banner.category}`}
-                  className="inline-flex items-center gap-2 font-bold px-8 py-3 rounded-sm text-sm transition-all hover:scale-105"
-                  style={{ backgroundColor: 'white', color: '#2874f0' }}
-                >
-                  {banner.cta} <FaChevronRight className="text-xs" />
-                </Link>
-              </div>
-            </div>
-          ))}
-
-          {/* Carousel Controls */}
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-            {BANNERS.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setActiveBanner(i)}
-                className="rounded-full transition-all"
-                style={{
-                  width: i === activeBanner ? '24px' : '8px',
-                  height: '8px',
-                  backgroundColor: i === activeBanner ? 'white' : 'rgba(255,255,255,0.5)',
-                }}
-              />
-            ))}
-          </div>
-
-          <button
-            onClick={() => setActiveBanner((p) => (p - 1 + BANNERS.length) % BANNERS.length)}
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-gray-800 font-bold text-xl z-10 hover:bg-white hover:shadow-lg transition"
-            style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}
-          >
-            ‹
-          </button>
-          <button
-            onClick={() => setActiveBanner((p) => (p + 1) % BANNERS.length)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-gray-800 font-bold text-xl z-10 hover:bg-white hover:shadow-lg transition"
-            style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}
-          >
-            ›
-          </button>
+    <Link to={`/product/${id}`} className="fk-card min-w-[200px] max-w-[200px] overflow-hidden rounded-sm bg-white">
+      <div className="h-[172px] bg-[#f5f5f5] p-2">
+        <img
+          src={image || fallbackImage}
+          alt={name}
+          className="h-full w-full object-contain"
+          onError={(event) => {
+            (event.target as HTMLImageElement).src = fallbackImage;
+          }}
+        />
+      </div>
+      <div className="p-2.5">
+        <p className="line-clamp-1 text-[14px] text-[#212121]">{name}</p>
+        <div className="mt-1 flex items-center gap-2">
+          <span className="text-[16px] font-semibold text-[#212121]">{formatCurrency(price)}</span>
+          <span className="text-[12px] text-[#878787] line-through">{formatCurrency(mrp)}</span>
         </div>
+        {tag ? <p className="mt-1 text-[12px] font-semibold text-[#388e3c]">{tag}</p> : null}
+      </div>
+    </Link>
+  );
+}
 
-        {/* Category Strip */}
-        <div className="bg-white rounded-sm shadow-sm p-0 mb-3 overflow-hidden">
-          <div className="px-4 py-3 border-b border-gray-200">
-            <h3 className="text-lg font-bold text-gray-800">Shop by Category</h3>
-          </div>
-          <div className="flex gap-0 overflow-x-auto scrollbar-hide">
-            {CATEGORY_ITEMS.map((cat) => (
+function RailSection({
+  title,
+  products,
+  loading,
+  highlight,
+}: {
+  title: string;
+  products: Array<{
+    id: string;
+    name: string;
+    price: number;
+    mrp: number;
+    images: string[];
+  }>;
+  loading: boolean;
+  highlight?: boolean;
+}) {
+  return (
+    <section className={`mb-4 rounded-sm border ${highlight ? "border-[#d6e69e] bg-[#c7e53a]" : "fk-surface bg-white"} p-3`}>
+      <div className="mb-3 flex items-center justify-between px-1">
+        <h2 className="text-[24px] font-semibold text-[#212121]">{title}</h2>
+        <Link to="/products" className="flex h-9 w-9 items-center justify-center rounded-full bg-[#2a55e5] text-white">
+          <FiArrowRight className="text-base" />
+        </Link>
+      </div>
+
+      <div className={`rounded ${highlight ? "bg-[#f4f4f4] p-2" : ""}`}>
+        <div className="scrollbar-hide flex gap-3 overflow-x-auto pb-2">
+          {loading
+            ? Array.from({ length: 6 }).map((_, idx) => <ProductSkeleton key={idx} />)
+            : products.map((product) => {
+                const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100);
+                return (
+                  <RailItem
+                    key={product.id}
+                    id={product.id}
+                    name={product.name}
+                    price={product.price}
+                    mrp={product.mrp}
+                    image={product.images?.[0]}
+                    tag={discount >= 40 ? "Hot Deal" : "Top Rated"}
+                  />
+                );
+              })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default function Home() {
+  const { data: categories } = useGetCategoriesQuery();
+  const { data, isLoading } = useGetProductsQuery({ page: 1, limit: 40 });
+
+  const products = data?.products ?? [];
+  const suggested = products.slice(0, 10);
+  const shoes = products.filter((item) => item.category?.slug === "fashion").slice(0, 8);
+  const spotlight = products.slice(10, 20);
+
+  return (
+    <div className="pb-8">
+      <div className="fk-page pt-4">
+        <div className="fk-surface mb-4 rounded-sm bg-white p-3">
+          <div className="scrollbar-hide flex gap-6 overflow-x-auto px-1 py-1">
+            {categories?.map((category) => (
               <Link
-                key={cat.slug}
-                to={`/products?category=${cat.slug}`}
-                className="flex-shrink-0 w-32 py-6 px-4 text-center hover:bg-gray-50 transition border-r border-gray-100 group"
+                key={category.id}
+                to={`/products?category=${category.slug}&tab=${category.slug}`}
+                className="flex min-w-[88px] flex-col items-center gap-2"
               >
-                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform">
-                  {['📱', '💻', '👗', '🔌', '⚽', '🏠', '💄', '📚'][CATEGORY_ITEMS.indexOf(cat)]}
+                <div className="h-16 w-16 overflow-hidden rounded-xl bg-[#f1f3f6] p-1.5">
+                  <img
+                    src={category.imageUrl ?? "https://via.placeholder.com/64x64"}
+                    alt={category.name}
+                    className="h-full w-full rounded object-cover"
+                  />
                 </div>
-                <span className="text-sm font-medium text-gray-700 group-hover:text-[#2874f0]">
-                  {cat.name}
-                </span>
+                <span className="text-[13px] font-medium text-[#212121]">{category.name}</span>
               </Link>
             ))}
           </div>
         </div>
 
-        {/* Promotional Tiles */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-          <div
-            className="rounded-sm p-8 flex items-center justify-between hover:shadow-lg transition cursor-pointer"
-            style={{ background: 'linear-gradient(135deg, #ffd89b 0%, #19547b 100%)' }}
-          >
-            <div>
-              <h3 className="font-bold text-xl text-white mb-1">Sponsored</h3>
-              <p className="text-sm text-white opacity-90">Exclusive offers on brands</p>
-            </div>
-            <span className="text-5xl">⭐</span>
-          </div>
-          <div
-            className="rounded-sm p-8 flex items-center justify-between hover:shadow-lg transition cursor-pointer"
-            style={{ background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }}
-          >
-            <div>
-              <h3 className="font-bold text-xl text-white mb-1">Best Sellers</h3>
-              <p className="text-sm text-white opacity-90">Top rated products</p>
-            </div>
-            <span className="text-5xl">🏆</span>
-          </div>
-        </div>
-
-        {/* Featured Products Section */}
-        <div className="bg-white rounded-sm shadow-sm overflow-hidden mb-3">
-          <div className="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
-            <h2 className="text-xl font-bold text-gray-800">Best Offers For You</h2>
+        <div className="mb-4 grid grid-cols-1 gap-3 lg:grid-cols-12">
+          {HERO_BANNERS.map((banner, idx) => (
             <Link
-              to="/products"
-              className="text-sm font-bold px-5 py-1.5 rounded-sm text-white transition hover:shadow-md"
-              style={{ backgroundColor: '#2874f0' }}
+              key={banner.title}
+              to={`/products?category=${banner.category}`}
+              className={`${banner.bg} relative overflow-hidden rounded-lg p-4 text-white shadow-sm ${idx < 2 ? "lg:col-span-5" : "lg:col-span-2"}`}
             >
-              VIEW ALL
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-white/90">{banner.subtitle}</p>
+              <h3 className="mt-2 text-[28px] font-bold leading-tight">{banner.title}</h3>
+              <span className="mt-3 inline-flex items-center gap-2 rounded bg-black/20 px-3 py-1.5 text-[13px] font-semibold">
+                {banner.cta} <FiArrowRight />
+              </span>
             </Link>
-          </div>
-          <div className="p-4">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-              {featuredLoading
-                ? Array(12).fill(0).map((_, i) => <ProductSkeleton key={i} />)
-                : featured?.map((product) => <ProductCard key={product.id} product={product} />)
-              }
-            </div>
-            {!featuredLoading && !featured?.length && (
-              <div className="col-span-6 py-10 text-center text-gray-400">
-                <p>No featured products available</p>
-              </div>
-            )}
-          </div>
+          ))}
         </div>
 
-        {/* Deal of the Day Section */}
-        <div className="bg-white rounded-sm shadow-sm overflow-hidden mb-3">
-          <div className="px-5 py-4 border-b border-gray-200" style={{ backgroundColor: '#ffd89b' }}>
-            <h2 className="text-xl font-bold text-gray-800">Deal of the Day</h2>
-          </div>
-          <div className="p-4">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-              {featuredLoading
-                ? Array(6).fill(0).map((_, i) => <ProductSkeleton key={i} />)
-                : featured?.slice(0, 6).map((product) => <ProductCard key={product.id} product={product} />)
-              }
-            </div>
-          </div>
-        </div>
-
-        {/* Flipkart Plus Banner */}
-        <div
-          className="rounded-sm p-8 mb-3 flex items-center justify-between hover:shadow-lg transition"
-          style={{ background: 'linear-gradient(135deg, #2874f0, #1a5dc8)' }}
-        >
-          <div className="text-white flex-1">
-            <h3 className="text-2xl font-bold mb-2">Flipkart Plus</h3>
-            <p className="text-sm opacity-90">Unlock exclusive benefits — Free delivery, early access & more</p>
-          </div>
-          <Link
-            to="/products"
-            className="font-bold px-8 py-3 rounded-sm text-sm flex-shrink-0 hover:shadow-lg transition"
-            style={{ backgroundColor: '#ffe500', color: '#212121' }}
-          >
-            Explore Plus
-          </Link>
-        </div>
-
+        <RailSection title="Suggested For You" products={suggested} loading={isLoading} />
+        <RailSection
+          title="Men's Casual Shoes For You"
+          products={shoes.length ? shoes : suggested.slice(0, 8)}
+          loading={isLoading}
+          highlight
+        />
+        <RailSection title="In The Spotlight" products={spotlight.length ? spotlight : suggested} loading={isLoading} />
       </div>
     </div>
   );

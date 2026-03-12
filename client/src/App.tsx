@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from './hooks/redux';
+import { useAppDispatch } from './hooks/redux';
 import './index.css'
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
@@ -24,7 +24,6 @@ interface LoginResponse {
 
 function App() {
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = useAppSelector((s) => s.auth);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -48,7 +47,7 @@ function App() {
   return (
     <div className="min-h-screen bg-flipgray">
       <Navbar />
-      <main>
+      <main className="min-h-[calc(100vh-260px)]">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<ProductListing />} />

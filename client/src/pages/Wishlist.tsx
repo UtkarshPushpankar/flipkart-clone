@@ -1,67 +1,77 @@
-import { Link } from 'react-router-dom';
-import { FaTrash } from 'react-icons/fa';
-import { useGetWishlistQuery, useRemoveFromWishlistMutation } from '../store/api/wishlistApi';
-import { useAddToCartMutation } from '../store/api/cartApi';
-import { useAppSelector } from '../hooks/redux';
-import { formatCurrency, calculateDiscount } from '../utils/formatCurrency';
-import toast from 'react-hot-toast';
+import { Link } from "react-router-dom";
+import { FiTrash2 } from "react-icons/fi";
+import { useGetWishlistQuery, useRemoveFromWishlistMutation } from "../store/api/wishlistApi";
+import { useAddToCartMutation } from "../store/api/cartApi";
+import { useAppSelector } from "../hooks/redux";
+import { calculateDiscount, formatCurrency } from "../utils/formatCurrency";
+import toast from "react-hot-toast";
 
 export default function Wishlist() {
-  const { isAuthenticated } = useAppSelector((s) => s.auth);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
   const { data: wishlist, isLoading } = useGetWishlistQuery(undefined, { skip: !isAuthenticated });
   const [removeFromWishlist] = useRemoveFromWishlistMutation();
   const [addToCart] = useAddToCartMutation();
 
-  if (!isAuthenticated) return (
-    <div className="max-w-7xl mx-auto px-4 py-16 text-center">
-      <h2 className="text-xl font-semibold text-gray-700 mb-4">Please login to view wishlist</h2>
-      <Link to="/login" className="bg-flipblue text-white px-8 py-2 rounded font-semibold">Login</Link>
-    </div>
-  );
+  if (!isAuthenticated) {
+    return (
+      <div className="fk-page py-16 text-center">
+        <h1 className="text-2xl font-semibold">Please login to view your wishlist</h1>
+        <Link to="/login" className="mt-4 inline-block rounded-sm bg-[#2a55e5] px-6 py-2 text-white">
+          Login
+        </Link>
+      </div>
+    );
+  }
 
-  if (isLoading) return <div className="text-center py-20 text-gray-500">Loading wishlist...</div>;
+  if (isLoading) {
+    return <div className="fk-page py-16 text-center text-[#878787]">Loading wishlist...</div>;
+  }
 
-  if (!wishlist?.length) return (
-    <div className="max-w-7xl mx-auto px-4 py-16 text-center">
-      <div className="text-6xl mb-4">❤️</div>
-      <h2 className="text-xl font-semibold text-gray-700 mb-2">Your wishlist is empty</h2>
-      <Link to="/products" className="mt-4 inline-block bg-flipblue text-white px-8 py-2 rounded font-semibold">Explore Products</Link>
-    </div>
-  );
+  if (!wishlist?.length) {
+    return (
+      <div className="fk-page py-16 text-center">
+        <h1 className="text-2xl font-semibold">Your wishlist is empty</h1>
+        <Link to="/products" className="mt-4 inline-block rounded-sm bg-[#2a55e5] px-6 py-2 text-white">
+          Explore products
+        </Link>
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6">
-      <h1 className="text-xl font-bold text-gray-800 mb-4">My Wishlist ({wishlist.length})</h1>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="fk-page py-3">
+      <h1 className="mb-3 text-xl font-semibold text-[#212121]">My Wishlist ({wishlist.length})</h1>
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
         {wishlist.map((item) => (
-          <div key={item.id} className="bg-white rounded shadow-sm p-3 flex flex-col">
-            <Link to={`/product/${item.productId}`} className="flex items-center justify-center h-44 mb-3 border border-gray-100 rounded p-2">
-              <img src={item.product.images?.[0]} alt={item.product.name} className="max-h-full max-w-full object-contain" />
+          <div key={item.id} className="fk-card rounded-sm bg-white p-3">
+            <Link to={`/product/${item.productId}`} className="flex h-44 items-center justify-center rounded border border-[#f0f0f0] p-2">
+              <img src={item.product.images[0]} alt={item.product.name} className="h-full w-full object-contain" />
             </Link>
-            <p className="text-sm font-medium text-gray-800 line-clamp-2 mb-1">{item.product.name}</p>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="font-bold text-gray-900">{formatCurrency(item.product.price)}</span>
-              <span className="text-xs text-flipgreen font-semibold">{calculateDiscount(item.product.price, item.product.mrp)}% off</span>
+            <p className="line-clamp-2 mt-2 text-sm text-[#212121]">{item.product.name}</p>
+            <div className="mt-2 flex items-center gap-2">
+              <span className="text-lg font-semibold">{formatCurrency(item.product.price)}</span>
+              <span className="text-xs font-semibold text-[#388e3c]">
+                {calculateDiscount(item.product.price, item.product.mrp)}% off
+              </span>
             </div>
-            <div className="flex gap-2 mt-auto">
+            <div className="mt-3 flex items-center gap-2">
               <button
                 onClick={async () => {
                   await addToCart({ productId: item.productId, quantity: 1 }).unwrap();
-                  toast.success('Added to cart!');
+                  toast.success("Added to cart");
                 }}
-                className="flex-1 bg-fliporange text-white text-xs font-bold py-2 rounded hover:bg-orange-600"
+                className="flex-1 rounded-sm bg-[#fb641b] py-2 text-xs font-semibold uppercase text-white"
               >
-                ADD TO CART
+                Add to cart
               </button>
               <button
                 onClick={async () => {
                   await removeFromWishlist(item.productId).unwrap();
-                  toast.success('Removed');
+                  toast.success("Removed");
                 }}
-                className="p-2 border border-gray-300 rounded hover:bg-red-50 hover:border-red-300 text-gray-500 hover:text-red-500"
-                aria-label="Remove from wishlist"
+                className="rounded-sm border border-[#d9d9d9] p-2 text-[#878787] hover:text-[#ff4343]"
               >
-                <FaTrash className="text-xs" />
+                <FiTrash2 />
               </button>
             </div>
           </div>

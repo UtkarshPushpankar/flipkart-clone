@@ -1,135 +1,128 @@
-import { Link } from 'react-router-dom';
-import { FaFacebook, FaTwitter, FaInstagram, FaYoutube } from 'react-icons/fa';
+import { FiGift, FiHelpCircle, FiPieChart, FiShoppingBag } from "react-icons/fi";
+
+const ABOUT_LINKS = [
+  "Contact Us",
+  "About Us",
+  "Careers",
+  "Flipkart Stories",
+  "Press",
+  "Corporate Information",
+];
+
+const GROUP_LINKS = ["Myntra", "Cleartrip", "Shopsy"];
+const HELP_LINKS = ["Payments", "Shipping", "Cancellation & Returns", "FAQ"];
+const POLICY_LINKS = [
+  "Cancellation & Returns",
+  "Terms Of Use",
+  "Security",
+  "Privacy",
+  "Sitemap",
+  "Grievance Redressal",
+  "EPR Compliance",
+  "FSSAI Food Safety Connect App",
+];
 
 export default function Footer() {
   return (
-    <footer style={{ backgroundColor: '#172337', color: '#9e9e9e' }} className="mt-8">
-      <div className="max-w-[1300px] mx-auto px-4 py-10">
-        {/* Main Footer Links */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 pb-8 border-b border-gray-700">
+    <footer className="mt-10 bg-[#172337] text-[#878787]">
+      <div className="fk-page py-10">
+        <div className="grid grid-cols-2 gap-6 border-b border-[#454d5e] pb-8 md:grid-cols-6">
           <div>
-            <h4 className="text-[11px] font-bold uppercase mb-4 tracking-wider text-gray-400">ABOUT</h4>
-            <ul className="space-y-3">
-              {['Contact Us', 'About Us', 'Careers', 'Flipkart Stories', 'Press', 'Corporate Information'].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-xs hover:text-white transition-colors duration-200">
-                    {item}
-                  </a>
+            <h4 className="mb-3 text-xs uppercase tracking-wide">About</h4>
+            <ul className="space-y-1.5 text-xs text-white">
+              {ABOUT_LINKS.map((item) => (
+                <li key={item} className="hover:underline">
+                  <a href="#">{item}</a>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h4 className="text-[11px] font-bold uppercase mb-4 tracking-wider text-gray-400">GROUP COMPANIES</h4>
-            <ul className="space-y-3">
-              {['Myntra', 'Cleartrip', 'Shopsy'].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-xs hover:text-white transition-colors duration-200">
-                    {item}
-                  </a>
+            <h4 className="mb-3 text-xs uppercase tracking-wide">Group Companies</h4>
+            <ul className="space-y-1.5 text-xs text-white">
+              {GROUP_LINKS.map((item) => (
+                <li key={item} className="hover:underline">
+                  <a href="#">{item}</a>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h4 className="text-[11px] font-bold uppercase mb-4 tracking-wider text-gray-400">HELP</h4>
-            <ul className="space-y-3">
-              {['Payments', 'Shipping', 'Cancellation & Returns', 'FAQ', 'Report Infringement'].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-xs hover:text-white transition-colors duration-200">
-                    {item}
-                  </a>
+            <h4 className="mb-3 text-xs uppercase tracking-wide">Help</h4>
+            <ul className="space-y-1.5 text-xs text-white">
+              {HELP_LINKS.map((item) => (
+                <li key={item} className="hover:underline">
+                  <a href="#">{item}</a>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h4 className="text-[11px] font-bold uppercase mb-4 tracking-wider text-gray-400">CONSUMER POLICY</h4>
-            <ul className="space-y-3">
-              {['Return Policy', 'Terms Of Use', 'Security', 'Privacy', 'Sitemap', 'EPR Compliance'].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-xs hover:text-white transition-colors duration-200">
-                    {item}
-                  </a>
+            <h4 className="mb-3 text-xs uppercase tracking-wide">Consumer Policy</h4>
+            <ul className="space-y-1.5 text-xs text-white">
+              {POLICY_LINKS.map((item) => (
+                <li key={item} className="hover:underline">
+                  <a href="#">{item}</a>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div>
-            <h4 className="text-[11px] font-bold uppercase mb-4 tracking-wider text-gray-400">FOLLOW US</h4>
-            <div className="flex gap-4 text-lg">
-              <a href="#" className="hover:text-white transition-colors duration-200" title="Facebook">
-                <FaFacebook />
-              </a>
-              <a href="#" className="hover:text-white transition-colors duration-200" title="Twitter">
-                <FaTwitter />
-              </a>
-              <a href="#" className="hover:text-white transition-colors duration-200" title="Instagram">
-                <FaInstagram />
-              </a>
-              <a href="#" className="hover:text-white transition-colors duration-200" title="YouTube">
-                <FaYoutube />
-              </a>
-            </div>
+          <div className="md:col-span-2 md:border-l md:border-[#454d5e] md:pl-8">
+            <h4 className="mb-3 text-xs uppercase tracking-wide">Mail Us:</h4>
+            <p className="text-xs leading-5 text-white">
+              Flipkart Internet Private Limited,
+              <br />
+              Buildings Alyssa, Begonia &
+              <br />
+              Clove Embassy Tech Village,
+              <br />
+              Outer Ring Road, Devarabeesanahalli Village,
+              <br />
+              Bengaluru, 560103,
+              <br />
+              Karnataka, India
+            </p>
+            <h4 className="mb-3 mt-5 text-xs uppercase tracking-wide">Registered Office Address:</h4>
+            <p className="text-xs leading-5 text-white">
+              Flipkart Internet Private Limited,
+              <br />
+              Buildings Alyssa, Begonia &
+              <br />
+              Clove Embassy Tech Village,
+              <br />
+              Outer Ring Road, Devarabeesanahalli Village,
+              <br />
+              Bengaluru, 560103, Karnataka, India
+              <br />
+              CIN : U51109KA2012PTC066107
+              <br />
+              Telephone: 044-45614700 / 044-67415800
+            </p>
           </div>
         </div>
 
-        {/* Bottom Section */}
-        <div className="pt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Left - Business Links */}
-          <div className="space-y-3">
-            <h4 className="text-[12px] font-bold uppercase text-gray-400 mb-4">BUSINESS</h4>
-            <div className="flex flex-col gap-2">
-              <a href="#" className="text-xs hover:text-white transition-colors duration-200 flex items-center gap-2">
-                🏢 Become a Seller
-              </a>
-              <a href="#" className="text-xs hover:text-white transition-colors duration-200 flex items-center gap-2">
-                📢 Advertise
-              </a>
-              <a href="#" className="text-xs hover:text-white transition-colors duration-200 flex items-center gap-2">
-                🎁 Gift Cards
-              </a>
-            </div>
-          </div>
-
-          {/* Center - Help */}
-          <div className="space-y-3">
-            <h4 className="text-[12px] font-bold uppercase text-gray-400 mb-4">HELP</h4>
-            <div className="flex flex-col gap-2">
-              <a href="#" className="text-xs hover:text-white transition-colors duration-200 flex items-center gap-2">
-                ❓ Help Centre
-              </a>
-              <a href="#" className="text-xs hover:text-white transition-colors duration-200 flex items-center gap-2">
-                📞 Contact Us
-              </a>
-            </div>
-          </div>
-
-          {/* Right - Info */}
-          <div className="space-y-3">
-            <h4 className="text-[12px] font-bold uppercase text-gray-400 mb-4">CONTACT</h4>
-            <div className="text-xs space-y-2">
-              <p>Flipkart Internet Pvt. Ltd.</p>
-              <p>Buildings Alyssa, Bengaluru & Clove Embassy Tech Village</p>
-              <p>Outer Ring Road, Bangalore, 560103</p>
-              <p className="text-blue-400 hover:text-blue-300 cursor-pointer">044-45614700 / 044-67415800</p>
-            </div>
-          </div>
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#454d5e] py-6 text-sm text-white">
+          <a href="#" className="flex items-center gap-2 hover:text-[#ffe500]">
+            <FiShoppingBag className="text-[#ffe500]" /> Become a Seller
+          </a>
+          <a href="#" className="flex items-center gap-2 hover:text-[#ffe500]">
+            <FiPieChart className="text-[#ffe500]" /> Advertise
+          </a>
+          <a href="#" className="flex items-center gap-2 hover:text-[#ffe500]">
+            <FiGift className="text-[#ffe500]" /> Gift Cards
+          </a>
+          <a href="#" className="flex items-center gap-2 hover:text-[#ffe500]">
+            <FiHelpCircle className="text-[#ffe500]" /> Help Center
+          </a>
+          <span className="text-[#fff]">� 2007-2026 Flipkart.com</span>
         </div>
 
-        {/* Copyright */}
-        <div className="mt-8 pt-6 border-t border-gray-700 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-gray-400">
-            © 2007–2026 Flipkart.com (Clone for Educational Purposes)
-          </p>
-          <div className="flex gap-3">
-            <img src="https://static-assets-web.flixcart.com/fk-p-flag/en_US.svg" alt="EN" className="w-5 h-3" />
-            <span className="text-xs text-gray-400">India</span>
-          </div>
+        <div className="pt-5 text-xs text-[#c2c2c2]">
+          No cost EMI from selected banks. Keep shopping with trust and secure payments.
         </div>
       </div>
     </footer>

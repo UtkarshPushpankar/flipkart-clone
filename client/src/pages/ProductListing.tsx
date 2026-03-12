@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
-import { useGetProductsQuery, useGetCategoriesQuery } from '../store/api/productsApi';
-import ProductCard from '../components/product/ProductCard';
-import ProductSkeleton from '../components/common/Skeleton';
-import { FaFilter } from 'react-icons/fa';
+import { useEffect, useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { FiChevronRight, FiFilter } from "react-icons/fi";
+import { useGetCategoriesQuery, useGetProductsQuery } from "../store/api/productsApi";
+import ProductCard from "../components/product/ProductCard";
+import ProductSkeleton from "../components/common/Skeleton";
 
 interface SortOption {
   label: string;
@@ -11,126 +11,186 @@ interface SortOption {
 }
 
 const SORT_OPTIONS: SortOption[] = [
-  { label: 'Relevance', value: '' },
-  { label: 'Price: Low to High', value: 'price_asc' },
-  { label: 'Price: High to Low', value: 'price_desc' },
-  { label: 'Top Rated', value: 'rating' },
+  { label: "Relevance", value: "" },
+  { label: "Price -- Low to High", value: "price_asc" },
+  { label: "Price -- High to Low", value: "price_desc" },
+  { label: "Customer Rating", value: "rating" },
 ];
 
 export default function ProductListing() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [sort, setSort] = useState<string>('');
-  const [page, setPage] = useState<number>(1);
+  const [params, setParams] = useSearchParams();
+  const [sort, setSort] = useState("");
+  const [page, setPage] = useState(1);
 
-  const search = searchParams.get('search') || '';
-  const category = searchParams.get('category') || '';
+  const search = params.get("search") || "";
+  const category = params.get("category") || "";
 
-  const { data, isLoading } = useGetProductsQuery({ search, category, sort, page, limit: 12 });
+  const { data, isLoading } = useGetProductsQuery({ search, category, sort, page, limit: 16 });
   const { data: categories } = useGetCategoriesQuery();
 
-  useEffect(() => { setPage(1); }, [search, category, sort]);
+  useEffect(() => {
+    setPage(1);
+  }, [search, category, sort]);
 
-  const handleCategory = (slug: string) => {
-    const params = new URLSearchParams(searchParams);
-    if (slug) params.set('category', slug);
-    else params.delete('category');
-    params.delete('search');
-    setSearchParams(params);
+  const activeCategoryLabel = useMemo(() => {
+    if (!category) return "All Products";
+    return categories?.find((item) => item.slug === category)?.name || "Products";
+  }, [categories, category]);
+
+  const onCategorySelect = (slug: string) => {
+    const next = new URLSearchParams(params);
+    if (!slug) {
+      next.delete("category");
+      next.delete("tab");
+    } else {
+      next.set("category", slug);
+      next.set("tab", slug);
+    }
+    setParams(next);
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-4">
-      <div className="flex gap-4">
-        {/* Sidebar */}
-        <aside className="hidden md:block w-56 flex-shrink-0">
-          <div className="bg-white rounded shadow-sm p-4 sticky top-20">
-            <h3 className="font-bold text-gray-800 border-b pb-2 mb-3 flex items-center gap-2">
-              <FaFilter className="text-flipblue" /> Filters
-            </h3>
-            <div>
-              <h4 className="font-semibold text-sm text-gray-700 mb-2">CATEGORY</h4>
-              <ul className="space-y-1">
-                <li>
-                  <button
-                    onClick={() => handleCategory('')}
-                    className={`text-sm w-full text-left py-1 px-2 rounded ${!category ? 'text-flipblue font-semibold' : 'text-gray-600 hover:text-flipblue'}`}
-                  >
-                    All Categories
-                  </button>
-                </li>
-                {categories?.map((cat) => (
-                  <li key={cat.id}>
-                    <button
-                      onClick={() => handleCategory(cat.slug)}
-                      className={`text-sm w-full text-left py-1 px-2 rounded flex items-center gap-2 ${category === cat.slug ? 'text-flipblue font-semibold' : 'text-gray-600 hover:text-flipblue'}`}
-                    >
-                      <input type="checkbox" readOnly checked={category === cat.slug} className="accent-flipblue" />
-                      {cat.name}
-                    </button>
-                  </li>
-                ))}
-              </ul>
+    <div className="fk-page py-4">
+      <div className="mb-3 text-xs text-[#878787]">
+        Home <FiChevronRight className="inline" /> {activeCategoryLabel}
+        {search ? (
+          <>
+            <FiChevronRight className="inline" /> Search for "{search}"
+          </>
+        ) : null}
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[260px_1fr]">
+        <aside className="fk-surface hidden rounded-sm bg-white p-4 lg:block">
+          <div className="mb-4 flex items-center justify-between border-b border-[#f0f0f0] pb-3">
+            <h2 className="text-lg font-semibold">Filters</h2>
+            <FiFilter className="text-[#2a55e5]" />
+          </div>
+
+          <div>
+            <p className="mb-2 text-xs font-semibold uppercase text-[#212121]">Categories</p>
+            <button
+              onClick={() => onCategorySelect("")}
+              className={`mb-2 block w-full rounded-sm px-2 py-1.5 text-left text-sm ${
+                !category ? "bg-[#f0f5ff] font-semibold text-[#2a55e5]" : "hover:bg-[#f8f8f8]"
+              }`}
+            >
+              All Categories
+            </button>
+            <div className="space-y-1">
+              {categories?.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => onCategorySelect(item.slug)}
+                  className={`flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm ${
+                    category === item.slug
+                      ? "bg-[#f0f5ff] font-semibold text-[#2a55e5]"
+                      : "text-[#212121] hover:bg-[#f8f8f8]"
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    className="accent-[#2a55e5]"
+                    checked={category === item.slug}
+                    readOnly
+                  />
+                  <span>{item.name}</span>
+                </button>
+              ))}
             </div>
           </div>
         </aside>
 
-        {/* Main */}
-        <div className="flex-1">
-          <div className="bg-white rounded shadow-sm p-3 mb-4 flex items-center justify-between flex-wrap gap-2">
-            <div>
-              <span className="font-semibold text-gray-800">
-                {search
-                  ? `Results for "${search}"`
-                  : category
-                  ? categories?.find((c) => c.slug === category)?.name
-                  : 'All Products'}
-              </span>
-              {data && <span className="text-sm text-gray-500 ml-2">({data.total} items)</span>}
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-500 font-semibold">Sort By:</span>
-              <div className="flex gap-2 overflow-x-auto">
-                {SORT_OPTIONS.map((opt) => (
-                  <button
-                    key={opt.value}
-                    onClick={() => setSort(opt.value)}
-                    className={`text-xs px-3 py-1.5 rounded whitespace-nowrap font-medium transition-colors ${sort === opt.value ? 'text-flipblue border-b-2 border-flipblue' : 'text-gray-600 hover:text-flipblue'}`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
+        <section className="fk-surface rounded-sm bg-white">
+          <div className="border-b border-[#f0f0f0] px-4 py-3">
+            <h1 className="text-[14px] text-[#212121]">
+              {search ? (
+                <>
+                  Search results for <span className="font-semibold">"{search}"</span>
+                </>
+              ) : (
+                <span className="font-semibold">{activeCategoryLabel}</span>
+              )}
+              <span className="ml-2 text-[#878787]">({data?.total ?? 0} items)</span>
+            </h1>
+
+            <div className="mt-3 flex flex-wrap items-center gap-4 text-[14px]">
+              <span className="font-medium text-[#212121]">Sort By</span>
+              {SORT_OPTIONS.map((option) => (
+                <button
+                  key={option.value || "relevance"}
+                  onClick={() => setSort(option.value)}
+                  className={`relative pb-1 ${
+                    sort === option.value
+                      ? "font-semibold text-[#2a55e5]"
+                      : "text-[#212121] hover:text-[#2a55e5]"
+                  }`}
+                >
+                  {option.label}
+                  {sort === option.value ? (
+                    <span className="absolute bottom-0 left-0 h-[2px] w-full rounded bg-[#2a55e5]" />
+                  ) : null}
+                </button>
+              ))}
             </div>
           </div>
 
-          {isLoading ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-              {Array(12).fill(0).map((_, i) => <ProductSkeleton key={i} />)}
-            </div>
-          ) : data?.products?.length === 0 ? (
-            <div className="bg-white rounded shadow-sm p-16 text-center">
-              <div className="text-6xl mb-4">🔍</div>
-              <h3 className="text-xl font-semibold text-gray-700">No products found</h3>
-              <p className="text-gray-500 mt-2">Try a different search or category</p>
-              <Link to="/products" className="mt-4 inline-block text-flipblue font-semibold hover:underline">View all products</Link>
-            </div>
-          ) : (
-            <>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                {data?.products?.map((product) => <ProductCard key={product.id} product={product} />)}
+          <div className="p-4">
+            {isLoading ? (
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+                {Array.from({ length: 12 }).map((_, index) => (
+                  <ProductSkeleton key={index} />
+                ))}
               </div>
-              {data && data.totalPages > 1 && (
-                <div className="flex justify-center items-center gap-2 mt-6">
-                  <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1} className="px-4 py-2 bg-white rounded shadow text-sm font-medium disabled:opacity-40 hover:bg-gray-50">← Prev</button>
-                  {Array.from({ length: data.totalPages }, (_, i) => i + 1).map((p) => (
-                    <button key={p} onClick={() => setPage(p)} className={`px-3 py-2 rounded text-sm font-medium ${p === page ? 'bg-flipblue text-white' : 'bg-white shadow hover:bg-gray-50'}`}>{p}</button>
+            ) : data?.products?.length ? (
+              <>
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+                  {data.products.map((product) => (
+                    <ProductCard key={product.id} product={product} />
                   ))}
-                  <button onClick={() => setPage((p) => Math.min(data.totalPages, p + 1))} disabled={page === data.totalPages} className="px-4 py-2 bg-white rounded shadow text-sm font-medium disabled:opacity-40 hover:bg-gray-50">Next →</button>
                 </div>
-              )}
-            </>
-          )}
-        </div>
+
+                {data.totalPages > 1 ? (
+                  <div className="mt-6 flex flex-wrap items-center justify-center gap-2 border-t border-[#f0f0f0] pt-4">
+                    <button
+                      onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+                      disabled={page === 1}
+                      className="rounded-sm border border-[#d9d9d9] px-3 py-1.5 text-sm disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      Previous
+                    </button>
+                    {Array.from({ length: data.totalPages }, (_, idx) => idx + 1).map((value) => (
+                      <button
+                        key={value}
+                        onClick={() => setPage(value)}
+                        className={`min-w-8 rounded-sm px-3 py-1.5 text-sm ${
+                          value === page ? "bg-[#2a55e5] text-white" : "border border-[#d9d9d9]"
+                        }`}
+                      >
+                        {value}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => setPage((prev) => Math.min(data.totalPages, prev + 1))}
+                      disabled={page === data.totalPages}
+                      className="rounded-sm border border-[#d9d9d9] px-3 py-1.5 text-sm disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      Next
+                    </button>
+                  </div>
+                ) : null}
+              </>
+            ) : (
+              <div className="flex min-h-[320px] flex-col items-center justify-center gap-2 text-center">
+                <h3 className="text-2xl font-semibold text-[#212121]">No products found</h3>
+                <p className="text-sm text-[#878787]">Try another search or clear active filters.</p>
+                <Link to="/products" className="mt-2 rounded-sm bg-[#2a55e5] px-6 py-2 text-sm font-semibold text-white">
+                  View all products
+                </Link>
+              </div>
+            )}
+          </div>
+        </section>
       </div>
     </div>
   );

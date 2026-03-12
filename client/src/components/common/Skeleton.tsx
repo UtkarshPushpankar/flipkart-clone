@@ -1,10 +1,12 @@
 export default function ProductSkeleton() {
   return (
-    <div className="bg-white p-3 animate-pulse" style={{ border: '1px solid #f0f0f0' }}>
-      <div className="h-44 bg-gray-100 rounded mb-3"></div>
-      <div className="h-3.5 bg-gray-100 rounded mb-2"></div>
-      <div className="h-3 bg-gray-100 rounded w-3/4 mb-2"></div>
-      <div className="h-4 bg-gray-100 rounded w-1/2"></div>
+    <div className="fk-card min-w-[180px] animate-pulse overflow-hidden rounded-sm bg-white">
+      <div className="h-[210px] bg-[#f3f3f3]" />
+      <div className="space-y-2 p-3">
+        <div className="h-3 w-full rounded bg-[#ececec]" />
+        <div className="h-3 w-3/4 rounded bg-[#ececec]" />
+        <div className="h-4 w-1/2 rounded bg-[#ececec]" />
+      </div>
     </div>
   );
 }

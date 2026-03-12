@@ -3,7 +3,7 @@ const { sendOrderConfirmationEmail } = require('../services/emailService');
 const prisma = new PrismaClient();
 
 exports.placeOrder = async (req, res) => {
-  const { addressId, paymentMethod = 'COD' } = req.body;
+  const { addressId, address, paymentMethod = 'COD' } = req.body;
 
   const cartItems = await prisma.cartItem.findMany({
     where: { userId: req.user.id },
@@ -12,15 +12,48 @@ exports.placeOrder = async (req, res) => {
   if (cartItems.length === 0)
     return res.status(400).json({ message: 'Cart is empty' });
 
-  const address = await prisma.address.findFirst({
-    where: { id: addressId, userId: req.user.id },
-  });
-  if (!address) return res.status(404).json({ message: 'Address not found' });
-
   // Check stock
   for (const item of cartItems) {
     if (item.product.stock < item.quantity)
       return res.status(400).json({ message: `Insufficient stock for ${item.product.name}` });
+  }
+
+  let selectedAddressId = addressId;
+
+  if (selectedAddressId) {
+    const existingAddress = await prisma.address.findFirst({
+      where: { id: selectedAddressId, userId: req.user.id },
+    });
+    if (!existingAddress) return res.status(404).json({ message: 'Address not found' });
+  } else if (address) {
+    const requiredFields = ['fullName', 'phone', 'pincode', 'street', 'city', 'state'];
+    const missingField = requiredFields.find((field) => !address[field]?.toString().trim());
+    if (missingField) {
+      return res.status(400).json({ message: `Missing address field: ${missingField}` });
+    }
+
+    const createdAddress = await prisma.address.create({
+      data: {
+        userId: req.user.id,
+        fullName: address.fullName.trim(),
+        phone: address.phone.trim(),
+        pincode: address.pincode.trim(),
+        street: address.street.trim(),
+        city: address.city.trim(),
+        state: address.state.trim(),
+        isDefault: false,
+      },
+    });
+    selectedAddressId = createdAddress.id;
+  } else {
+    const fallbackAddress = await prisma.address.findFirst({
+      where: { userId: req.user.id },
+      orderBy: { isDefault: 'desc' },
+    });
+    if (!fallbackAddress) {
+      return res.status(400).json({ message: 'Address is required to place order' });
+    }
+    selectedAddressId = fallbackAddress.id;
   }
 
   const totalAmount = cartItems.reduce(
@@ -31,7 +64,7 @@ exports.placeOrder = async (req, res) => {
     const newOrder = await tx.order.create({
       data: {
         userId: req.user.id,
-        addressId,
+        addressId: selectedAddressId,
         totalAmount,
         paymentMethod,
         items: {

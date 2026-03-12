@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useLoginMutation } from '../store/api/authApi';
-import { useAppDispatch } from '../hooks/redux';
-import { setCredentials } from '../store/slices/authSlice';
-import toast from 'react-hot-toast';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FiCheckCircle } from "react-icons/fi";
+import { useLoginMutation } from "../store/api/authApi";
+import { useAppDispatch } from "../hooks/redux";
+import { setCredentials } from "../store/slices/authSlice";
+import toast from "react-hot-toast";
 
 interface LoginForm {
   email: string;
@@ -11,114 +12,84 @@ interface LoginForm {
 }
 
 export default function Login() {
-  const [form, setForm] = useState<LoginForm>({ email: '', password: '' });
+  const [form, setForm] = useState<LoginForm>({ email: "", password: "" });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [login, { isLoading }] = useLoginMutation();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     try {
       const data = await login(form).unwrap();
       dispatch(setCredentials(data));
-      toast.success(`Welcome back, ${data.user.name}!`);
-      navigate('/');
-    } catch (err: unknown) {
-      const error = err as { data?: { message?: string } };
-      toast.error(error.data?.message || 'Login failed');
+      toast.success(`Welcome back, ${data.user.name}`);
+      navigate("/");
+    } catch (error: unknown) {
+      const apiError = error as { data?: { message?: string } };
+      toast.error(apiError.data?.message || "Login failed");
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center p-4">
-      <div className="flex bg-white rounded-sm shadow-2xl overflow-hidden w-full max-w-4xl">
-        {/* Left Side - Branding */}
-        <div className="bg-gradient-to-br from-blue-600 to-blue-800 p-12 hidden md:flex flex-col justify-between w-2/5 text-white">
-          <div>
-            <h1 className="text-4xl font-bold italic mb-2">Flipkart</h1>
-            <p className="text-blue-100 text-lg">Your Daily Shopping Destination</p>
-          </div>
-          <div className="space-y-4">
-            <div className="flex items-start gap-3">
-              <span className="text-2xl">✓</span>
-              <div>
-                <p className="font-semibold">Secure & Safe</p>
-                <p className="text-sm text-blue-100">Bank-grade encryption for your data</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <span className="text-2xl">✓</span>
-              <div>
-                <p className="font-semibold">Easy Returns</p>
-                <p className="text-sm text-blue-100">10-day easy returns policy</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <span className="text-2xl">✓</span>
-              <div>
-                <p className="font-semibold">Fast Delivery</p>
-                <p className="text-sm text-blue-100">Get your orders within 3-5 days</p>
-              </div>
-            </div>
+    <div className="fk-page py-8">
+      <div className="mx-auto grid max-w-4xl overflow-hidden rounded-sm bg-white shadow lg:grid-cols-[360px_1fr]">
+        <div className="bg-[#2874f0] p-8 text-white">
+          <h1 className="text-3xl font-semibold">Login</h1>
+          <p className="mt-3 text-sm text-blue-100">Get access to your Orders, Wishlist and Recommendations.</p>
+
+          <div className="mt-8 space-y-3 text-sm text-blue-100">
+            <p className="flex items-center gap-2">
+              <FiCheckCircle /> Faster checkout
+            </p>
+            <p className="flex items-center gap-2">
+              <FiCheckCircle /> Secure transactions
+            </p>
+            <p className="flex items-center gap-2">
+              <FiCheckCircle /> Real-time order updates
+            </p>
           </div>
         </div>
 
-        {/* Right Side - Login Form */}
-        <div className="flex-1 p-8 md:p-12 flex flex-col justify-center">
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold text-gray-800 mb-2">Login</h2>
-            <p className="text-gray-600">Access your account to manage orders and wishlist</p>
-          </div>
+        <div className="p-8">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <input
+              type="email"
+              placeholder="Enter Email"
+              value={form.email}
+              onChange={(event) => setForm((prev) => ({ ...prev, email: event.target.value }))}
+              className="w-full border-b border-[#d9d9d9] py-2 text-sm outline-none focus:border-[#2874f0]"
+              required
+            />
 
-          <form onSubmit={handleSubmit} className="space-y-5 mb-6">
-            <div>
-              <label className="text-sm text-gray-700 font-semibold block mb-2">Email Address</label>
-              <input
-                type="email"
-                placeholder="Enter your email"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                required
-                className="w-full border-b-2 border-gray-300 pb-2 outline-none text-sm focus:border-blue-600 transition-colors"
-              />
-            </div>
+            <input
+              type="password"
+              placeholder="Enter Password"
+              value={form.password}
+              onChange={(event) => setForm((prev) => ({ ...prev, password: event.target.value }))}
+              className="w-full border-b border-[#d9d9d9] py-2 text-sm outline-none focus:border-[#2874f0]"
+              required
+            />
 
-            <div>
-              <label className="text-sm text-gray-700 font-semibold block mb-2">Password</label>
-              <input
-                type="password"
-                placeholder="Enter your password"
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-                required
-                className="w-full border-b-2 border-gray-300 pb-2 outline-none text-sm focus:border-blue-600 transition-colors"
-              />
-            </div>
-
-            <p className="text-xs text-gray-500 leading-relaxed">
-              By logging in, you agree to Flipkart's Terms of Use and Privacy Policy.
+            <p className="text-xs text-[#878787]">
+              By continuing, you agree to Flipkart clone Terms of Use and Privacy Policy.
             </p>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-sm text-base transition shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full rounded-sm bg-[#fb641b] py-3 text-sm font-semibold text-white disabled:opacity-60"
             >
-              {isLoading ? 'Logging in...' : 'Login'}
+              {isLoading ? "Logging in..." : "Login"}
             </button>
           </form>
 
-          {/* Demo Credentials */}
-          <div className="bg-blue-50 border border-blue-200 rounded-sm p-3 mb-6 text-sm text-gray-700">
-            <p className="font-semibold text-blue-900 mb-1">Demo Credentials:</p>
-            <p className="text-xs text-gray-600">Email: <code className="bg-white px-1 py-0.5 rounded">user@flipkart.com</code></p>
-            <p className="text-xs text-gray-600">Password: <code className="bg-white px-1 py-0.5 rounded">password123</code></p>
+          <div className="mt-4 rounded-sm bg-[#f5f8ff] p-3 text-xs text-[#212121]">
+            Demo login: <strong>user@flipkart.com</strong> / <strong>password123</strong>
           </div>
 
-          {/* Sign Up Link */}
-          <div className="text-center border-t pt-6">
-            <span className="text-sm text-gray-600">New to Flipkart? </span>
-            <Link to="/signup" className="text-orange-500 font-bold text-sm hover:text-orange-600 transition">
+          <div className="mt-6 text-center text-sm">
+            New to Flipkart?{" "}
+            <Link to="/signup" className="font-semibold text-[#2874f0]">
               Create an account
             </Link>
           </div>
