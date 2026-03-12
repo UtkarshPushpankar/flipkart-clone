@@ -112,19 +112,19 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-[#dfe1e5] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
       <div className="fk-page">
-        <div className="flex items-center justify-between gap-2 py-2.5">
+        <div className="flex items-center justify-between gap-2 p-2.5">
           <div className="flex items-center gap-3">
             <Link
               to="/"
               className="flex h-11 min-w-[126px] items-center gap-2 rounded-xl bg-[#ffe500] px-4"
             >
-              <FaBolt className="text-xl text-[#2874f0]" />
+              <img src="/flipkart-logo.webp" height={25} width={25} alt="flipkart-logo" />
               <div className="leading-tight">
                 <p className="text-[15px] font-bold italic text-[#1f1f1f]">Flipkart</p>
               </div>
             </Link>
-            <button className="hidden h-11 min-w-[126px] items-center gap-2 rounded-xl bg-[#f0f0f0] px-4 md:flex">
-              <MdFlightTakeoff className="text-lg text-[#ff6c37]" />
+            <button className="hidden h-11 min-w-[126px] flex items-center gap-2 rounded-xl bg-gray-200 px-4 md:flex">
+              <img src="/aeroplane-logo-navbar.webp" height={30} width={30} alt="" />
               <span className="text-[15px] font-semibold text-[#1f1f1f]">Travel</span>
             </button>
           </div>

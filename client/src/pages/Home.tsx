@@ -54,8 +54,8 @@ function RailItem({
   const fallbackImage = `https://via.placeholder.com/300x300?text=${encodeURIComponent(name)}`;
 
   return (
-    <Link to={`/product/${id}`} className="fk-card min-w-[200px] max-w-[200px] overflow-hidden rounded-sm bg-white">
-      <div className="h-[172px] bg-[#f5f5f5] p-2">
+    <Link to={`/product/${id}`} className="fk-card min-w-[196px] max-w-[196px] overflow-hidden rounded-sm bg-white">
+      <div className="h-[172px] bg-[#f7f7f7] p-2">
         <img
           src={image || fallbackImage}
           alt={name}
@@ -66,9 +66,9 @@ function RailItem({
         />
       </div>
       <div className="p-2.5">
-        <p className="line-clamp-1 text-[14px] text-[#212121]">{name}</p>
+        <p className="line-clamp-2 min-h-[36px] text-[14px] leading-[1.3] text-[#212121]">{name}</p>
         <div className="mt-1 flex items-center gap-2">
-          <span className="text-[16px] font-semibold text-[#212121]">{formatCurrency(price)}</span>
+          <span className="text-[18px] font-semibold leading-none text-[#212121]">{formatCurrency(price)}</span>
           <span className="text-[12px] text-[#878787] line-through">{formatCurrency(mrp)}</span>
         </div>
         {tag ? <p className="mt-1 text-[12px] font-semibold text-[#388e3c]">{tag}</p> : null}
@@ -95,32 +95,34 @@ function RailSection({
   highlight?: boolean;
 }) {
   return (
-    <section className={`mb-4 rounded-sm border ${highlight ? "border-[#d6e69e] bg-[#c7e53a]" : "fk-surface bg-white"} p-3`}>
+    <section
+      className={`mb-4 rounded-sm border ${highlight ? "border-[#d6e69e] bg-[#c7e53a]" : "fk-surface bg-white"} p-3`}
+    >
       <div className="mb-3 flex items-center justify-between px-1">
-        <h2 className="text-[24px] font-semibold text-[#212121]">{title}</h2>
+        <h2 className="fk-section-title">{title}</h2>
         <Link to="/products" className="flex h-9 w-9 items-center justify-center rounded-full bg-[#2a55e5] text-white">
           <FiArrowRight className="text-base" />
         </Link>
       </div>
 
-      <div className={`rounded ${highlight ? "bg-[#f4f4f4] p-2" : ""}`}>
+      <div className={`rounded-sm ${highlight ? "bg-[#f4f4f4] p-2" : ""}`}>
         <div className="scrollbar-hide flex gap-3 overflow-x-auto pb-2">
           {loading
             ? Array.from({ length: 6 }).map((_, idx) => <ProductSkeleton key={idx} />)
             : products.map((product) => {
-                const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100);
-                return (
-                  <RailItem
-                    key={product.id}
-                    id={product.id}
-                    name={product.name}
-                    price={product.price}
-                    mrp={product.mrp}
-                    image={product.images?.[0]}
-                    tag={discount >= 40 ? "Hot Deal" : "Top Rated"}
-                  />
-                );
-              })}
+              const discount = Math.round(((product.mrp - product.price) / product.mrp) * 100);
+              return (
+                <RailItem
+                  key={product.id}
+                  id={product.id}
+                  name={product.name}
+                  price={product.price}
+                  mrp={product.mrp}
+                  image={product.images?.[0]}
+                  tag={discount >= 40 ? "Hot Deal" : "Top Rated"}
+                />
+              );
+            })}
         </div>
       </div>
     </section>
@@ -139,13 +141,13 @@ export default function Home() {
   return (
     <div className="pb-8">
       <div className="fk-page pt-4">
-        <div className="fk-surface mb-4 rounded-sm bg-white p-3">
-          <div className="scrollbar-hide flex gap-6 overflow-x-auto px-1 py-1">
+        <div className="fk-surface mb-4 rounded-sm bg-white px-3 py-3">
+          <div className="scrollbar-hide flex gap-6 overflow-x-auto px-1">
             {categories?.map((category) => (
               <Link
                 key={category.id}
                 to={`/products?category=${category.slug}&tab=${category.slug}`}
-                className="flex min-w-[88px] flex-col items-center gap-2"
+                className="flex min-w-[90px] flex-col items-center gap-2"
               >
                 <div className="h-16 w-16 overflow-hidden rounded-xl bg-[#f1f3f6] p-1.5">
                   <img
@@ -165,10 +167,11 @@ export default function Home() {
             <Link
               key={banner.title}
               to={`/products?category=${banner.category}`}
-              className={`${banner.bg} relative overflow-hidden rounded-lg p-4 text-white shadow-sm ${idx < 2 ? "lg:col-span-5" : "lg:col-span-2"}`}
+              className={`${banner.bg} relative overflow-hidden rounded-lg p-4 text-white shadow-sm ${idx < 2 ? "lg:col-span-5" : "lg:col-span-2"
+                }`}
             >
               <p className="text-[11px] font-semibold uppercase tracking-wide text-white/90">{banner.subtitle}</p>
-              <h3 className="mt-2 text-[28px] font-bold leading-tight">{banner.title}</h3>
+              <h3 className={`mt-2 font-bold leading-tight ${idx < 2 ? "text-[28px]" : "text-[24px]"}`}>{banner.title}</h3>
               <span className="mt-3 inline-flex items-center gap-2 rounded bg-black/20 px-3 py-1.5 text-[13px] font-semibold">
                 {banner.cta} <FiArrowRight />
               </span>
@@ -188,3 +191,4 @@ export default function Home() {
     </div>
   );
 }
+

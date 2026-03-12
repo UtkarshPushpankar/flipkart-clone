@@ -110,9 +110,8 @@ export default function ProductDetail() {
                 <button
                   key={`${image}-${idx}`}
                   onClick={() => setSelectedImage(idx)}
-                  className={`h-[68px] w-[68px] overflow-hidden rounded border bg-white p-1 ${
-                    idx === selectedImage ? "border-[#2874f0]" : "border-[#ececec]"
-                  }`}
+                  className={`h-[68px] w-[68px] overflow-hidden rounded border bg-white p-1 ${idx === selectedImage ? "border-[#2874f0]" : "border-[#ececec]"
+                    }`}
                 >
                   <img src={image} alt={`${product.name} ${idx + 1}`} className="h-full w-full object-contain" />
                 </button>
@@ -150,7 +149,7 @@ export default function ProductDetail() {
         </section>
 
         <section className="fk-surface rounded-sm bg-white p-4">
-          <h1 className="text-[28px] font-normal leading-tight text-[#212121]">{product.name}</h1>
+          <h1 className="text-[24px] font-normal leading-tight text-[#212121]">{product.name}</h1>
           <p className="mt-1 text-[15px] text-[#878787]">Brand: {product.brand}</p>
 
           <div className="mt-2 flex items-center gap-2">
@@ -161,9 +160,9 @@ export default function ProductDetail() {
           </div>
 
           <div className="mt-3 flex flex-wrap items-baseline gap-3">
-            <span className="text-[34px] font-semibold leading-none text-[#212121]">{formatCurrency(product.price)}</span>
+            <span className="text-[30px] font-semibold leading-none text-[#212121]">{formatCurrency(product.price)}</span>
             <span className="fk-price-cut text-[16px]">{formatCurrency(product.mrp)}</span>
-            {discount > 0 ? <span className="text-[18px] font-semibold text-[#388e3c]">{discount}% off</span> : null}
+            {discount > 0 ? <span className="text-[16px] font-semibold text-[#388e3c]">{discount}% off</span> : null}
           </div>
 
           {product.stock <= 10 && product.stock > 0 ? (
@@ -172,7 +171,7 @@ export default function ProductDetail() {
           {product.stock === 0 ? <p className="mt-1 text-[14px] font-semibold text-[#d32f2f]">Out of stock</p> : null}
 
           <div className="mt-4 border-t border-[#f0f0f0] pt-3">
-            <h2 className="mb-2 text-[20px] font-semibold text-[#212121]">Available offers</h2>
+            <h2 className="mb-2 text-[18px] font-semibold text-[#212121]">Available offers</h2>
             <ul className="space-y-2 text-[14px] text-[#212121]">
               <li className="flex items-start gap-2">
                 <FiTag className="mt-0.5 text-[#2a55e5]" />
@@ -196,7 +195,7 @@ export default function ProductDetail() {
           </div>
 
           <div className="mt-4 border-t border-[#f0f0f0] pt-3">
-            <h2 className="mb-2 text-[20px] font-semibold text-[#212121]">Delivery details</h2>
+            <h2 className="mb-2 text-[18px] font-semibold text-[#212121]">Delivery details</h2>
             <div className="space-y-2 text-[14px]">
               <p className="flex items-center gap-2 rounded bg-[#f0f5ff] p-2 text-[#2a55e5]">
                 <FiMapPin /> Location not set <strong>Select delivery location</strong>
@@ -211,7 +210,7 @@ export default function ProductDetail() {
           </div>
 
           <div className="mt-4 border-t border-[#f0f0f0] pt-3">
-            <h2 className="mb-3 text-[20px] font-semibold text-[#212121]">Product highlights</h2>
+            <h2 className="mb-3 text-[18px] font-semibold text-[#212121]">Product highlights</h2>
             <div className="grid grid-cols-1 gap-x-8 gap-y-2 md:grid-cols-2">
               {Object.entries(product.specifications || {}).map(([label, value]) => (
                 <div key={label} className="border-b border-[#f0f0f0] pb-2">
@@ -223,7 +222,7 @@ export default function ProductDetail() {
           </div>
 
           <div className="mt-4 border-t border-[#f0f0f0] pt-3">
-            <h2 className="mb-2 text-[20px] font-semibold text-[#212121]">Description</h2>
+            <h2 className="mb-2 text-[18px] font-semibold text-[#212121]">Description</h2>
             <p className="text-[15px] leading-6 text-[#212121]">{product.description}</p>
           </div>
         </section>

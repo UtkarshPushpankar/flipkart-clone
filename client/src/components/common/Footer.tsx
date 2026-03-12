@@ -25,8 +25,8 @@ const POLICY_LINKS = [
 export default function Footer() {
   return (
     <footer className="mt-10 bg-[#172337] text-[#878787]">
-      <div className="fk-page py-10">
-        <div className="grid grid-cols-2 gap-6 border-b border-[#454d5e] pb-8 md:grid-cols-6">
+      <div className="fk-page py-9">
+        <div className="grid grid-cols-2 gap-6 border-b border-[#454d5e] pb-7 md:grid-cols-6">
           <div>
             <h4 className="mb-3 text-xs uppercase tracking-wide">About</h4>
             <ul className="space-y-1.5 text-xs text-white">
@@ -71,7 +71,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="md:col-span-2 md:border-l md:border-[#454d5e] md:pl-8">
+          <div className="md:border-l md:border-[#454d5e] md:pl-6">
             <h4 className="mb-3 text-xs uppercase tracking-wide">Mail Us:</h4>
             <p className="text-xs leading-5 text-white">
               Flipkart Internet Private Limited,
@@ -86,7 +86,10 @@ export default function Footer() {
               <br />
               Karnataka, India
             </p>
-            <h4 className="mb-3 mt-5 text-xs uppercase tracking-wide">Registered Office Address:</h4>
+          </div>
+
+          <div>
+            <h4 className="mb-3 text-xs uppercase tracking-wide">Registered Office:</h4>
             <p className="text-xs leading-5 text-white">
               Flipkart Internet Private Limited,
               <br />
@@ -105,7 +108,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#454d5e] py-6 text-sm text-white">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#454d5e] py-5 text-sm text-white">
           <a href="#" className="flex items-center gap-2 hover:text-[#ffe500]">
             <FiShoppingBag className="text-[#ffe500]" /> Become a Seller
           </a>
@@ -118,13 +121,14 @@ export default function Footer() {
           <a href="#" className="flex items-center gap-2 hover:text-[#ffe500]">
             <FiHelpCircle className="text-[#ffe500]" /> Help Center
           </a>
-          <span className="text-[#fff]">© 2007-2026 Flipkart.com</span>
+          <span className="text-white">Â© 2007-2026 Flipkart.com</span>
         </div>
 
-        <div className="pt-5 text-xs text-[#c2c2c2]">
+        <div className="pt-4 text-xs text-[#c2c2c2]">
           No cost EMI from selected banks. Keep shopping with trust and secure payments.
         </div>
       </div>
     </footer>
   );
 }
+

@@ -199,11 +199,10 @@ export default function Checkout() {
               {PAYMENT_METHODS.map((method) => (
                 <label
                   key={method.id}
-                  className={`flex cursor-pointer items-center gap-2 rounded-sm border p-3 text-sm ${
-                    paymentMethod === method.id
+                  className={`flex cursor-pointer items-center gap-2 rounded-sm border p-3 text-sm ${paymentMethod === method.id
                       ? "border-[#2a55e5] bg-[#f0f5ff]"
                       : "border-[#e0e0e0]"
-                  }`}
+                    }`}
                 >
                   <input
                     type="radio"
@@ -265,3 +264,4 @@ export default function Checkout() {
     </div>
   );
 }
+
