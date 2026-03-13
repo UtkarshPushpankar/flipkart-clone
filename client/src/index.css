@@ -156,6 +156,28 @@ body {
   display: none;
 }
 
+.minimal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #c7d2e5 transparent;
+}
+
+.minimal-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.minimal-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.minimal-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: #c7d2e5;
+}
+
+.minimal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #aebdd8;
+}
+
 @layer base {
   button {
     border: none;

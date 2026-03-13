@@ -2,12 +2,33 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 exports.getProducts = async (req, res) => {
-  const { search, category, sort, page = 1, limit = 12 } = req.query;
+  const {
+    search,
+    category,
+    brand,
+    minPrice,
+    maxPrice,
+    minRating,
+    sort,
+    page = 1,
+    limit = 12,
+  } = req.query;
   const skip = (parseInt(page) - 1) * parseInt(limit);
+  const brands = typeof brand === 'string' && brand.trim()
+    ? brand.split(',').map((item) => item.trim()).filter(Boolean)
+    : [];
 
   const where = {
     ...(search && { name: { contains: search, mode: 'insensitive' } }),
     ...(category && { category: { slug: category } }),
+    ...(brands.length ? { brand: { in: brands } } : {}),
+    ...((minPrice || maxPrice) ? {
+      price: {
+        ...(minPrice ? { gte: parseInt(minPrice) } : {}),
+        ...(maxPrice ? { lte: parseInt(maxPrice) } : {}),
+      },
+    } : {}),
+    ...(minRating ? { rating: { gte: parseFloat(minRating) } } : {}),
   };
 
   const orderBy =
@@ -25,6 +46,45 @@ exports.getProducts = async (req, res) => {
   ]);
 
   res.json({ products, total, page: parseInt(page), totalPages: Math.ceil(total / parseInt(limit)) });
+};
+
+exports.getProductFacets = async (req, res) => {
+  const { search, category } = req.query;
+
+  const where = {
+    ...(search && { name: { contains: search, mode: 'insensitive' } }),
+    ...(category && { category: { slug: category } }),
+  };
+
+  const products = await prisma.product.findMany({
+    where,
+    select: { brand: true, price: true },
+  });
+
+  const brandsMap = new Map();
+  let min = Number.POSITIVE_INFINITY;
+  let max = 0;
+
+  products.forEach((product) => {
+    brandsMap.set(product.brand, (brandsMap.get(product.brand) || 0) + 1);
+    if (product.price < min) min = product.price;
+    if (product.price > max) max = product.price;
+  });
+
+  const brands = Array.from(brandsMap.entries())
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => {
+      if (b.count !== a.count) return b.count - a.count;
+      return a.name.localeCompare(b.name);
+    });
+
+  res.json({
+    brands,
+    priceRange: {
+      min: products.length ? min : 0,
+      max: products.length ? max : 0,
+    },
+  });
 };
 
 exports.getProductById = async (req, res) => {

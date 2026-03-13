@@ -92,9 +92,26 @@ export interface ProductsResponse {
   totalPages: number;
 }
 
+export interface ProductFacetBrand {
+  name: string;
+  count: number;
+}
+
+export interface ProductFacetsResponse {
+  brands: ProductFacetBrand[];
+  priceRange: {
+    min: number;
+    max: number;
+  };
+}
+
 export interface ProductQueryParams {
   search?: string;
   category?: string;
+  brand?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  minRating?: number;
   sort?: string;
   page?: number;
   limit?: number;
