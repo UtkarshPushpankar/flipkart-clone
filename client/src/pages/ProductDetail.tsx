@@ -125,6 +125,7 @@ export default function ProductDetail() {
     { label: "Performance", value: Math.min(5, ratingBase + 0.1).toFixed(1) },
   ];
   const reviewPhotos = mediaTiles.slice(1, 6);
+  const responsiveMediaTiles = mediaTiles.filter((_, idx) => idx < 2 || idx % 2 === 0);
 
   const handleAddToCart = async () => {
     if (!product) return false;
@@ -209,11 +210,11 @@ export default function ProductDetail() {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_560px]">
         <section className="space-y-3">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {mediaTiles.map((image, idx) => (
+            {responsiveMediaTiles.map((image, idx) => (
               <div
                 key={`${image}-${idx}`}
                 className={`relative overflow-hidden rounded-[12px] border border-[#e3e3e3] bg-[#e7e7e7] ${
-                  idx < 2 ? "h-[520px]" : "h-[320px]"
+                  idx < 2 ? "h-[320px] sm:h-[420px] lg:h-[520px]" : "h-[240px] sm:h-[280px] lg:h-[320px]"
                 }`}
               >
                 <img
@@ -247,6 +248,23 @@ export default function ProductDetail() {
                 )}
               </div>
             ))}
+          </div>
+
+          <div className="grid grid-cols-2 gap-2 md:hidden">
+            <button
+              onClick={handleAddToCart}
+              disabled={addingToCart || product.stock === 0}
+              className="fk-btn fk-btn-cart w-full disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              Add to cart
+            </button>
+            <button
+              onClick={handleBuyNow}
+              disabled={product.stock === 0}
+              className="fk-btn fk-btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              Buy now
+            </button>
           </div>
         </section>
 
@@ -312,7 +330,9 @@ export default function ProductDetail() {
               <p className="mt-3 text-[14px] font-semibold text-[#212121]">
                 {product.brand} <span className="font-normal text-[#2a55e5]">Visit store</span>
               </p>
-              <h1 className="mt-0.5 text-[32px] leading-[1.25] text-[#212121]">{product.name}</h1>
+              <h1 className="mt-0.5 text-[22px] leading-[1.25] text-[#212121] sm:text-[26px] lg:text-[32px]">
+                {product.name}
+              </h1>
 
               <div className="mt-2 flex items-center gap-2">
                 <span className="inline-flex items-center gap-1 rounded bg-[#388e3c] px-1.5 py-0.5 text-[12px] font-semibold text-white">
@@ -324,11 +344,13 @@ export default function ProductDetail() {
               </div>
 
               <div className="mt-2 flex items-baseline gap-2">
-                <span className="text-[34px] font-semibold text-[#212121]">
+                <span className="text-[28px] font-semibold text-[#212121] sm:text-[30px] lg:text-[34px]">
                   {formatCurrency(selectedVariantData?.price || product.price)}
                 </span>
-                <span className="text-[34px] text-[#388e3c]">{discount}%</span>
-                <span className="text-[34px] text-[#878787] line-through">
+                <span className="text-[28px] text-[#388e3c] sm:text-[30px] lg:text-[34px]">
+                  {discount}%
+                </span>
+                <span className="text-[28px] text-[#878787] line-through sm:text-[30px] lg:text-[34px]">
                   {formatCurrency(selectedVariantData?.mrp || product.mrp)}
                 </span>
               </div>
@@ -656,9 +678,9 @@ export default function ProductDetail() {
               <Link
                 key={item.id}
                 to={`/product/${item.id}`}
-                className="min-w-[220px] max-w-[220px] rounded-[10px] border border-[#ececec] bg-white p-2 hover:shadow-[0_2px_8px_rgba(0,0,0,0.1)]"
+                className="min-w-[170px] max-w-[170px] rounded-[10px] border border-[#ececec] bg-white p-2 hover:shadow-[0_2px_8px_rgba(0,0,0,0.1)] sm:min-w-[220px] sm:max-w-[220px]"
               >
-                <div className="relative h-[220px] overflow-hidden rounded-[8px] bg-[#f5f6f7]">
+                <div className="relative h-[170px] overflow-hidden rounded-[8px] bg-[#f5f6f7] sm:h-[220px]">
                   <img
                     src={item.images?.[0] || fallbackImage(item.name)}
                     alt={item.name}
@@ -685,7 +707,7 @@ export default function ProductDetail() {
 
       <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-[#d7d7d7] bg-white/95 backdrop-blur-sm">
         <div className="fk-page">
-          <div className="ml-auto flex w-full items-center gap-2 py-2 lg:max-w-[560px]">
+          <div className="ml-auto hidden w-full items-center gap-2 py-2 md:flex lg:max-w-[560px]">
             <button
               onClick={handleAddToCart}
               disabled={addingToCart || product.stock === 0}
@@ -715,6 +737,22 @@ export default function ProductDetail() {
               <span className="block text-[16px] font-semibold leading-[1.05] text-[#212121]">
                 at {formatCurrency(selectedVariantData?.price || product.price)}
               </span>
+            </button>
+          </div>
+          <div className="grid grid-cols-2 gap-2 py-2 md:hidden">
+            <button
+              onClick={handleAddToCart}
+              disabled={addingToCart || product.stock === 0}
+              className="fk-btn fk-btn-cart w-full disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              Add to cart
+            </button>
+            <button
+              onClick={handleBuyNow}
+              disabled={product.stock === 0}
+              className="fk-btn fk-btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              Buy now
             </button>
           </div>
         </div>

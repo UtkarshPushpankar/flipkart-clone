@@ -148,7 +148,7 @@ function FilterPanel({
         </div>
       </div>
 
-      <div className="minimal-scrollbar min-h-0 flex-1 overflow-y-auto overscroll-contain">
+      <div className="minimal-scrollbar min-h-0 flex-1 overflow-y-auto overscroll-contain pb-4">
         <div className="border-b border-[#f0f0f0] px-4 py-4">
           <p className="mb-2 text-[12px] font-semibold uppercase tracking-[0.4px] text-[#212121]">
             Category
@@ -492,8 +492,8 @@ export default function ProductListing() {
   };
 
   return (
-    <div className="fk-page py-4">
-      <div className="mb-3 text-xs text-[#878787]">
+    <div className="fk-page py-3 sm:py-4">
+      <div className="mb-3 hidden text-xs text-[#878787] sm:block">
         Home <FiChevronRight className="inline" /> {activeCategory?.name || "All Products"}
         {search ? (
           <>
@@ -546,7 +546,7 @@ export default function ProductListing() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[300px_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-[300px_minmax(0,1fr)]">
         <aside className="fk-surface hidden overflow-hidden rounded-[12px] bg-white lg:sticky lg:top-[104px] lg:block lg:h-[calc(100vh-124px)] lg:self-start">
           <FilterPanel
             categories={categories}
@@ -570,10 +570,10 @@ export default function ProductListing() {
         </aside>
 
         <section className="fk-surface overflow-hidden rounded-[12px] bg-white">
-          <div className="border-b border-[#f0f0f0] px-4 py-4">
+          <div className="border-b border-[#f0f0f0] px-3 py-3 sm:px-4 sm:py-4">
             <div className="flex flex-col gap-3">
               <div className="flex flex-wrap items-center gap-2">
-                <h1 className="text-[14px] text-[#212121]">
+                <h1 className="text-[13px] text-[#212121] sm:text-[14px]">
                   {search ? (
                     <>
                       <span className="font-semibold">
@@ -631,7 +631,7 @@ export default function ProductListing() {
                 ) : null}
               </div>
 
-              <div className="flex flex-wrap items-center gap-4 text-[14px]">
+              <div className="scrollbar-hide -mx-1 flex items-center gap-3 overflow-x-auto px-1 text-[13px] sm:flex-wrap sm:gap-4 sm:text-[14px]">
                 <span className="inline-flex items-center gap-2 font-medium text-[#212121]">
                   <FiSliders className="text-[#2874f0]" />
                   Sort By
@@ -640,7 +640,7 @@ export default function ProductListing() {
                   <button
                     key={option.value || "relevance"}
                     onClick={() => onSortSelect(option.value)}
-                    className={`relative pb-1 ${
+                    className={`relative whitespace-nowrap pb-1 ${
                       sort === option.value
                         ? "font-semibold text-[#2a55e5]"
                         : "text-[#212121] hover:text-[#2a55e5]"
@@ -656,16 +656,16 @@ export default function ProductListing() {
             </div>
           </div>
 
-          <div className="p-4">
+          <div className="p-3 sm:p-4">
             {isLoading ? (
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
                 {Array.from({ length: 12 }).map((_, index) => (
                   <ProductSkeleton key={index} />
                 ))}
               </div>
             ) : data?.products?.length ? (
               <>
-                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
                   {data.products.map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}
@@ -721,7 +721,7 @@ export default function ProductListing() {
 
       {isMobileFiltersOpen ? (
         <div className="fixed inset-0 z-[70] bg-black/40 lg:hidden">
-          <div className="absolute inset-x-0 bottom-0 top-[10%] rounded-t-[20px] bg-white shadow-2xl">
+          <div className="absolute inset-x-0 bottom-0 top-[72px] rounded-t-[20px] bg-white shadow-2xl sm:top-[88px]">
             <FilterPanel
               categories={categories}
               brands={brands}

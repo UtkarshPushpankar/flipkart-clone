@@ -58,7 +58,7 @@ export default function Cart() {
   const total = subtotal - discount + platformFee;
 
   return (
-    <div className="fk-page py-4">
+    <div className="fk-page py-4 pb-28 md:pb-4">
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_360px]">
         <section className="space-y-3">
           <div className="fk-surface rounded-sm bg-white">
@@ -152,12 +152,18 @@ export default function Cart() {
               );
             })}
 
-            <div className="flex justify-end p-4">
+            <div className="p-4">
               <button
                 onClick={() => navigate("/checkout")}
-                className="fk-btn fk-btn-primary px-12 uppercase tracking-wide"
+                className="fk-btn fk-btn-primary hidden px-12 uppercase tracking-wide md:inline-flex"
               >
                 Place order
+              </button>
+              <button
+                onClick={() => navigate("/checkout")}
+                className="fk-btn fk-btn-primary w-full uppercase tracking-wide md:hidden"
+              >
+                Proceed to checkout
               </button>
             </div>
           </div>
@@ -199,6 +205,21 @@ export default function Cart() {
             Safe and secure payments. Easy returns. 100% Authentic products.
           </p>
         </aside>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 z-[70] border-t border-[#d7d7d7] bg-white/98 p-3 pb-[calc(12px+env(safe-area-inset-bottom))] shadow-[0_-4px_20px_rgba(0,0,0,0.08)] backdrop-blur-sm md:hidden">
+        <div className="fk-page flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-[12px] text-[#878787]">Total Amount</p>
+            <p className="truncate text-[18px] font-semibold text-[#212121]">{formatCurrency(total)}</p>
+          </div>
+          <button
+            onClick={() => navigate("/checkout")}
+            className="fk-btn fk-btn-primary min-w-[172px] uppercase tracking-wide"
+          >
+            Place order
+          </button>
+        </div>
       </div>
     </div>
   );

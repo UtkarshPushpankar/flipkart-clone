@@ -96,7 +96,7 @@ export default function Checkout() {
   const total = subtotal - discount + platformFee;
 
   return (
-    <div className="fk-page py-4">
+    <div className="fk-page py-4 pb-28 md:pb-6">
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_360px]">
         <section className="space-y-3">
           <div className="fk-surface rounded-sm bg-white">
@@ -157,13 +157,21 @@ export default function Checkout() {
                   placeholder="State"
                   className="rounded-sm border border-[#d9d9d9] px-3 py-2 text-sm outline-none focus:border-[#2a55e5]"
                 />
-                <div className="mt-1 md:col-span-2">
+                <div className="mt-1 hidden md:col-span-2 md:block">
                   <button
                     type="submit"
                     className="fk-btn fk-btn-primary uppercase"
                     style={{ minWidth: "180px" }}
                   >
                     Continue
+                  </button>
+                </div>
+                <div className="mt-1 md:hidden">
+                  <button
+                    type="submit"
+                    className="fk-btn fk-btn-primary w-full uppercase"
+                  >
+                    Continue to payment
                   </button>
                 </div>
               </form>
@@ -214,14 +222,25 @@ export default function Checkout() {
                 </label>
               ))}
 
-              <button
-                onClick={handlePlaceOrder}
-                disabled={isLoading || step < 2}
-                className="fk-btn fk-btn-primary mt-2 uppercase"
-                style={{ minWidth: "220px" }}
-              >
-                {isLoading ? "Placing order..." : "Place order"}
-              </button>
+              <div className="hidden md:block">
+                <button
+                  onClick={handlePlaceOrder}
+                  disabled={isLoading || step < 2}
+                  className="fk-btn fk-btn-primary mt-2 uppercase"
+                  style={{ minWidth: "220px" }}
+                >
+                  {isLoading ? "Placing order..." : "Place order"}
+                </button>
+              </div>
+              <div className="md:hidden">
+                <button
+                  onClick={handlePlaceOrder}
+                  disabled={isLoading || step < 2}
+                  className="fk-btn fk-btn-primary mt-2 w-full uppercase"
+                >
+                  {isLoading ? "Placing order..." : "Place order"}
+                </button>
+              </div>
             </div>
           </div>
         </section>
@@ -260,6 +279,38 @@ export default function Checkout() {
             Back to cart
           </Link>
         </aside>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 z-[70] border-t border-[#e0e0e0] bg-white/98 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] backdrop-blur md:hidden">
+        <div className="fk-page flex items-center justify-between gap-3 py-3 pb-[calc(12px+env(safe-area-inset-bottom))]">
+          <div className="min-w-0">
+            <p className="text-[12px] text-[#878787]">Total Amount</p>
+            <p className="truncate text-[18px] font-semibold text-[#212121]">{formatCurrency(total)}</p>
+          </div>
+          {step < 2 ? (
+            <button
+              type="button"
+              onClick={() => {
+                const form = document.querySelector("form");
+                if (form) {
+                  form.requestSubmit();
+                }
+              }}
+              className="fk-btn fk-btn-primary min-w-[172px] uppercase tracking-wide"
+            >
+              Continue
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={handlePlaceOrder}
+              disabled={isLoading}
+              className="fk-btn fk-btn-primary min-w-[172px] uppercase tracking-wide"
+            >
+              {isLoading ? "Placing..." : "Place order"}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
