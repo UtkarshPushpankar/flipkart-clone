@@ -181,7 +181,26 @@ export default function Navbar() {
   }, [search, showSearchSuggestions, suggestionData?.products?.length]);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
+    let ticking = false;
+
+    const updateScrolled = () => {
+      const currentY = window.scrollY;
+      setScrolled((prev) => {
+        if (!prev && currentY > 96) return true;
+        if (prev && currentY < 48) return false;
+        return prev;
+      });
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        window.requestAnimationFrame(updateScrolled);
+      }
+    };
+
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -491,3 +510,4 @@ export default function Navbar() {
     </header>
   );
 }
+

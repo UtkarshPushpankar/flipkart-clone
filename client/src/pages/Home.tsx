@@ -49,6 +49,61 @@ const BRAND_SECTIONS = [
   },
 ];
 
+function BankOfferTimer() {
+  const [time, setTime] = useState({ h: 2, m: 59, s: 59 });
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setTime((prev) => {
+        let { h, m, s } = prev;
+        s--;
+        if (s < 0) {
+          s = 59;
+          m--;
+        }
+        if (m < 0) {
+          m = 59;
+          h--;
+        }
+        if (h < 0) {
+          h = 0;
+          m = 0;
+          s = 0;
+        }
+        return { h, m, s };
+      });
+    }, 1000);
+
+    return () => window.clearInterval(id);
+  }, []);
+
+  const pad = (value: number) => String(value).padStart(2, "0");
+
+  return (
+    <div className="mb-3 rounded-[14px] border border-[#e7ecf3] bg-[#f5f7ff] px-3 py-2 text-[#555] shadow-sm sm:mb-4 sm:px-4">
+      <div className="flex flex-wrap items-center justify-center gap-1.5 text-[12px] sm:text-[13px]">
+        <span className="font-medium text-[#212121]">Bank offer ends in</span>
+        <span className="inline-flex items-center gap-1">
+          <span className="min-w-[26px] rounded bg-[#2874f0] px-1.5 py-0.5 text-center text-[12px] font-bold text-white">
+            {pad(time.h)}
+          </span>
+          <span className="text-[11px] font-semibold">Hrs</span>
+          <span className="font-bold text-[#333]">:</span>
+          <span className="min-w-[26px] rounded bg-[#2874f0] px-1.5 py-0.5 text-center text-[12px] font-bold text-white">
+            {pad(time.m)}
+          </span>
+          <span className="text-[11px] font-semibold">Min</span>
+          <span className="font-bold text-[#333]">:</span>
+          <span className="min-w-[26px] rounded bg-[#2874f0] px-1.5 py-0.5 text-center text-[12px] font-bold text-white">
+            {pad(time.s)}
+          </span>
+          <span className="text-[11px] font-semibold">Sec</span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
 function BannerSlider() {
   const [visible, setVisible] = useState(3);
   const [idx, setIdx] = useState(0);
@@ -476,6 +531,7 @@ export default function Home() {
       </div>
 
       <div className="fk-page pb-5 sm:pb-6">
+        <BankOfferTimer />
         {!isLoading ? <GreenFashionSection tiles={fashionTiles} /> : null}
         {!isLoading ? <HeroSection title="Best Gadgets & Appliances" tiles={gadgets} /> : null}
         {!isLoading ? <HeroSection title="Popular nearby" tiles={popular} /> : null}
